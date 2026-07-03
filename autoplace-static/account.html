@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Личный кабинет - AutoPlace</title>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/account.css">
+  <script src="assets/js/account-menu.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/img/light.png" alt="AutoPlace">
+        </a>
+        <nav class="nav" aria-label="Основная навигация">
+          <a href="catalog.html">Каталог</a>
+          <a href="pricing.html">Тарифы</a>
+          <a href="dealer-offer.html">Для дилеров</a>
+          <a class="active" href="account.html">Кабинет</a>
+          <a href="#">Продать авто</a>
+          <a href="#">Помощь</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-outline" href="catalog.html">В каталог</a>
+          <a class="button button-primary" href="#">Разместить авто</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="account-hero">
+        <div class="container account-hero-inner">
+          <div>
+            <div class="breadcrumbs">
+              <a href="index.html">Главная</a>
+              <span>/</span>
+              <span>Личный кабинет</span>
+            </div>
+            <h1>Личный кабинет</h1>
+            <p class="subtitle">Следите за избранными автомобилями, сохранёнными поисками, уведомлениями и переговорами с продавцами.</p>
+          </div>
+          <div class="profile-card">
+            <div class="avatar">МК</div>
+            <div>
+              <strong>Максим К.</strong>
+              <span>maxim@example.com</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container account-layout">
+        <account-sidebar active="overview"></account-sidebar>
+
+        <div class="account-content">
+          <section class="metric-grid" id="overview" aria-label="Сводка">
+            <article class="metric-card">
+              <span>Избранное</span>
+              <strong>7</strong>
+              <p>2 автомобиля обновили цену</p>
+            </article>
+            <article class="metric-card">
+              <span>Сохранённые поиски</span>
+              <strong>4</strong>
+              <p>18 новых совпадений за неделю</p>
+            </article>
+            <article class="metric-card">
+              <span>Диалоги</span>
+              <strong>3</strong>
+              <p>1 ожидает ответа продавца</p>
+            </article>
+          </section>
+
+          <section class="panel" id="favorites">
+            <div class="panel-head">
+              <div>
+                <h2>Избранные автомобили</h2>
+                <p>Короткий список машин, к которым стоит вернуться.</p>
+              </div>
+              <a class="button button-outline" href="catalog.html">Найти ещё</a>
+            </div>
+
+            <div class="favorite-list">
+              <article class="favorite-card">
+                <img src="https://images.unsplash.com/photo-1549927681-0b673b8243ab?auto=format&fit=crop&w=500&q=80" alt="Toyota Camry">
+                <div>
+                  <h3>Toyota Camry 2.5</h3>
+                  <p>2021 · 42 000 км · бензин · Алматы</p>
+                </div>
+                <strong>$26 000</strong>
+                <a class="button button-outline" href="#">Открыть</a>
+              </article>
+
+              <article class="favorite-card">
+                <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=500&q=80" alt="Tesla Model 3">
+                <div>
+                  <h3>Tesla Model 3 Long Range</h3>
+                  <p>2022 · 18 000 км · электро · Астана</p>
+                </div>
+                <strong>$39 000</strong>
+                <a class="button button-outline" href="#">Открыть</a>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel" id="searches">
+            <div class="panel-head">
+              <div>
+                <h2>Сохранённые поиски</h2>
+                <p>AutoPlace может уведомлять, когда появляется подходящий автомобиль.</p>
+              </div>
+              <a class="button button-primary" href="catalog.html">Создать поиск</a>
+            </div>
+
+            <div class="search-list">
+              <article class="saved-search">
+                <div>
+                  <strong>Toyota Camry до $30 000</strong>
+                  <p>Алматы · 2020-2024 · пробег до 80 000 км</p>
+                </div>
+                <span class="badge">6 новых</span>
+              </article>
+              <article class="saved-search">
+                <div>
+                  <strong>Электромобили до $45 000</strong>
+                  <p>Астана · Tesla, Hyundai · от 2021 года</p>
+                </div>
+                <span class="badge">2 новых</span>
+              </article>
+              <article class="saved-search">
+                <div>
+                  <strong>BMW дизель</strong>
+                  <p>Любой город · до 60 000 км · дилеры</p>
+                </div>
+                <span class="badge">без новых</span>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel-grid">
+            <article class="panel" id="notifications">
+              <div class="panel-head compact">
+                <h2>Уведомления</h2>
+                <a href="notifications.html">Все</a>
+              </div>
+              <div class="timeline">
+                <div class="timeline-item">
+                  <span></span>
+                  <p><strong>Новая цена</strong> на Hyundai Tucson: $28 500</p>
+                </div>
+                <div class="timeline-item">
+                  <span></span>
+                  <p><strong>Новое совпадение</strong> по поиску Toyota Camry</p>
+                </div>
+                <div class="timeline-item">
+                  <span></span>
+                  <p><strong>Ответ продавца</strong> по Tesla Model 3</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="panel" id="messages">
+              <div class="panel-head compact">
+                <h2>Диалоги</h2>
+                <a href="#">Открыть</a>
+              </div>
+              <div class="message-list">
+                <div class="message-row">
+                  <div class="avatar small">AL</div>
+                  <div>
+                    <strong>Дилер AutoLine</strong>
+                    <p>Готовы показать Camry сегодня после 17:00.</p>
+                  </div>
+                </div>
+                <div class="message-row">
+                  <div class="avatar small">TM</div>
+                  <div>
+                    <strong>Продавец Tesla</strong>
+                    <p>Историю обслуживания отправил в чат.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </section>
+
+          <section class="panel" id="settings">
+            <div class="panel-head">
+              <div>
+                <h2>Настройки профиля</h2>
+                <p>Контакты и предпочтения уведомлений.</p>
+              </div>
+            </div>
+            <form class="settings-form">
+              <label>
+                <span>Имя</span>
+                <input class="control" type="text" value="Максим">
+              </label>
+              <label>
+                <span>Email</span>
+                <input class="control" type="email" value="maxim@example.com">
+              </label>
+              <label>
+                <span>Телефон</span>
+                <input class="control" type="tel" value="+7 700 000 00 00">
+              </label>
+              <label>
+                <span>Город</span>
+                <select class="control">
+                  <option>Алматы</option>
+                  <option>Астана</option>
+                  <option>Шымкент</option>
+                </select>
+              </label>
+              <button class="button button-primary" type="button">Сохранить</button>
+            </form>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>AutoPlace, 2026</span>
+        <span>Каталог · Проверка · Сделка</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

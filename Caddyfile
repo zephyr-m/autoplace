@@ -1,0 +1,8 @@
+http://autoplace.127.0.0.1.sslip.io {
+    reverse_proxy app:8000
+}
+
+http://admin.autoplace.127.0.0.1.sslip.io {
+    redir / /admin
+    reverse_proxy app:8000
+}

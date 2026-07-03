@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Каталог автомобилей - AutoPlace</title>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/catalog.css">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/img/light.png" alt="AutoPlace">
+        </a>
+        <nav class="nav" aria-label="Основная навигация">
+          <a class="active" href="catalog.html">Каталог</a>
+          <a href="pricing.html">Тарифы</a>
+          <a href="dealer-offer.html">Для дилеров</a>
+          <a href="account.html">Кабинет</a>
+          <a href="#">Продать авто</a>
+          <a href="#">Помощь</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-outline" href="account.html">Войти</a>
+          <a class="button button-primary" href="#">Разместить авто</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="catalog-hero">
+        <div class="container">
+          <div class="breadcrumbs">
+            <a href="index.html">Главная</a>
+            <span>/</span>
+            <span>Каталог</span>
+          </div>
+          <div class="catalog-title-row">
+            <div>
+              <h1>Каталог автомобилей</h1>
+              <p class="subtitle">Подберите автомобиль по бюджету, пробегу, году выпуска и типу продавца. Карточки показывают главное сразу, без перегруженных деталей.</p>
+            </div>
+            <div class="summary" aria-label="Сводка каталога">
+              <span class="badge">1 248 объявлений</span>
+              <span class="badge">326 от дилеров</span>
+              <span class="badge">82% с историей</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="container layout">
+        <aside class="filters" aria-label="Фильтры каталога">
+          <div class="filters-head">
+            <h2>Фильтры</h2>
+            <button class="button button-ghost" type="button" data-reset-filters>Сбросить</button>
+          </div>
+
+          <form class="filters-form">
+            <div class="filter-group">
+              <span class="filter-label">Марка</span>
+              <div class="multi-select" data-multiselect data-placeholder="Любая марка">
+                <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span data-trigger-label>Любая марка</span>
+                </button>
+                <div class="selected-tags" data-selected-tags aria-label="Выбранные марки"></div>
+                <div class="select-panel">
+                  <input class="control select-search" type="search" placeholder="Найти марку" data-select-search>
+                  <div class="option-list" data-option-list>
+                    <label class="option-row" data-option="Toyota"><input type="checkbox" value="Toyota">Toyota</label>
+                    <label class="option-row" data-option="BMW"><input type="checkbox" value="BMW">BMW</label>
+                    <label class="option-row" data-option="Tesla"><input type="checkbox" value="Tesla">Tesla</label>
+                    <label class="option-row" data-option="Hyundai"><input type="checkbox" value="Hyundai">Hyundai</label>
+                    <label class="option-row" data-option="Mercedes-Benz"><input type="checkbox" value="Mercedes-Benz">Mercedes-Benz</label>
+                    <label class="option-row" data-option="Porsche"><input type="checkbox" value="Porsche">Porsche</label>
+                    <label class="option-row" data-option="Chevrolet"><input type="checkbox" value="Chevrolet">Chevrolet</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label">Модель</span>
+              <div class="multi-select" data-multiselect data-placeholder="Любая модель">
+                <button class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span data-trigger-label>Любая модель</span>
+                </button>
+                <div class="selected-tags" data-selected-tags aria-label="Выбранные модели"></div>
+                <div class="select-panel">
+                  <input class="control select-search" type="search" placeholder="Найти модель" data-select-search>
+                  <div class="option-list" data-option-list>
+                    <label class="option-row" data-option="Camry"><input type="checkbox" value="Camry">Camry</label>
+                    <label class="option-row" data-option="RAV4"><input type="checkbox" value="RAV4">RAV4</label>
+                    <label class="option-row" data-option="Model 3"><input type="checkbox" value="Model 3">Model 3</label>
+                    <label class="option-row" data-option="320d"><input type="checkbox" value="320d">320d</label>
+                    <label class="option-row" data-option="Tucson"><input type="checkbox" value="Tucson">Tucson</label>
+                    <label class="option-row" data-option="C 200"><input type="checkbox" value="C 200">C 200</label>
+                    <label class="option-row" data-option="911 Carrera"><input type="checkbox" value="911 Carrera">911 Carrera</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="filter-group" data-range-filter data-min="0" data-max="150000" data-step="500" data-format="currency">
+              <span class="range-label">Цена</span>
+              <div class="range">
+                <input class="control" type="text" value="$20 000" aria-label="Цена от" data-range-input="min">
+                <input class="control" type="text" value="$50 000" aria-label="Цена до" data-range-input="max">
+              </div>
+              <div class="range-slider">
+                <div class="slider-track"></div>
+                <div class="slider-fill"></div>
+                <input type="range" min="0" max="150000" step="500" value="20000" aria-label="Цена от ползунок" data-range-slider="min">
+                <input type="range" min="0" max="150000" step="500" value="50000" aria-label="Цена до ползунок" data-range-slider="max">
+              </div>
+            </div>
+
+            <div class="filter-group" data-range-filter data-min="1990" data-max="2026" data-step="1" data-format="plain">
+              <span class="range-label">Год выпуска</span>
+              <div class="range">
+                <input class="control" type="text" value="2018" aria-label="Год от" data-range-input="min">
+                <input class="control" type="text" value="2024" aria-label="Год до" data-range-input="max">
+              </div>
+              <div class="range-slider">
+                <div class="slider-track"></div>
+                <div class="slider-fill"></div>
+                <input type="range" min="1990" max="2026" step="1" value="2018" aria-label="Год от ползунок" data-range-slider="min">
+                <input type="range" min="1990" max="2026" step="1" value="2024" aria-label="Год до ползунок" data-range-slider="max">
+              </div>
+            </div>
+
+            <div class="filter-group" data-range-filter data-min="0" data-max="250000" data-step="1000" data-format="mileage">
+              <span class="range-label">Пробег</span>
+              <div class="range">
+                <input class="control" type="text" value="0 км" aria-label="Пробег от" data-range-input="min">
+                <input class="control" type="text" value="80 000 км" aria-label="Пробег до" data-range-input="max">
+              </div>
+              <div class="range-slider">
+                <div class="slider-track"></div>
+                <div class="slider-fill"></div>
+                <input type="range" min="0" max="250000" step="1000" value="0" aria-label="Пробег от ползунок" data-range-slider="min">
+                <input type="range" min="0" max="250000" step="1000" value="80000" aria-label="Пробег до ползунок" data-range-slider="max">
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label">Топливо</span>
+              <div class="icon-list">
+                <label class="icon-check"><input type="checkbox" checked><span class="icon">⛽</span><span>Бензин</span></label>
+                <label class="icon-check"><input type="checkbox"><span class="icon">D</span><span>Дизель</span></label>
+                <label class="icon-check"><input type="checkbox"><span class="icon">H</span><span>Гибрид</span></label>
+                <label class="icon-check"><input type="checkbox"><span class="icon">⚡</span><span>Электро</span></label>
+              </div>
+            </div>
+
+            <div class="filter-group">
+              <span class="filter-label">Параметры сделки</span>
+              <div class="icon-list">
+                <label class="icon-check"><input type="checkbox" checked><span class="icon">✓</span><span>Проверенная история</span></label>
+                <label class="icon-check"><input type="checkbox"><span class="icon">🏢</span><span>Только дилеры</span></label>
+                <label class="icon-check"><input type="checkbox"><span class="icon">!</span><span>Без ДТП</span></label>
+              </div>
+            </div>
+
+            <div class="filter-actions">
+              <button class="button button-primary" type="button">Показать автомобили</button>
+              <button class="button button-outline" type="button">Сохранить поиск</button>
+            </div>
+          </form>
+        </aside>
+
+        <section class="content" aria-label="Список автомобилей">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <span class="count">248 автомобилей</span>
+              <span class="query">Toyota, BMW, Tesla · до $50 000 · до 80 000 км</span>
+            </div>
+            <div class="toolbar-right">
+              <div class="view-toggle" aria-label="Вид каталога">
+                <button class="view-button active" type="button" data-view="list" title="Список" aria-label="Список">☰</button>
+                <button class="view-button" type="button" data-view="gallery" title="Галерея" aria-label="Галерея">▦</button>
+                <button class="view-button" type="button" data-view="table" title="Таблица" aria-label="Таблица">▤</button>
+              </div>
+              <select class="control sort" aria-label="Сортировка">
+                <option>Сначала новые</option>
+                <option>Сначала дешевле</option>
+                <option>Сначала дороже</option>
+                <option>Меньше пробег</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="catalog-view list" data-catalog-view>
+          <div class="vehicle-list">
+            <article class="vehicle-card">
+              <div class="vehicle-image">
+                <img src="https://images.unsplash.com/photo-1549927681-0b673b8243ab?auto=format&fit=crop&w=900&q=80" alt="Белый седан Toyota Camry">
+                <span class="image-badge">Проверено</span>
+              </div>
+              <div class="vehicle-body">
+                <div class="vehicle-top">
+                  <div class="vehicle-title">
+                    <h2>Toyota Camry 2.5</h2>
+                    <p>Комфортный седан, один владелец, сервисная история</p>
+                  </div>
+                  <div class="price">$26 000</div>
+                </div>
+                <ul class="meta">
+                  <li>2021</li>
+                  <li>42 000 км</li>
+                  <li>Бензин</li>
+                  <li>203 л.с.</li>
+                  <li>Автомат</li>
+                </ul>
+                <div class="vehicle-bottom">
+                  <span class="seller"><strong>Дилер AutoLine</strong> · Алматы · сегодня</span>
+                  <div class="vehicle-actions">
+                    <a class="button button-outline" href="#">Сравнить</a>
+                    <a class="button button-primary" href="#">Подробнее</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="vehicle-card">
+              <div class="vehicle-image">
+                <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=900&q=80" alt="Tesla Model 3 в городе">
+                <span class="image-badge">Электро</span>
+              </div>
+              <div class="vehicle-body">
+                <div class="vehicle-top">
+                  <div class="vehicle-title">
+                    <h2>Tesla Model 3 Long Range</h2>
+                    <p>Полный привод, чистый салон, домашняя зарядка в комплекте</p>
+                  </div>
+                  <div class="price">$39 000</div>
+                </div>
+                <ul class="meta">
+                  <li>2022</li>
+                  <li>18 000 км</li>
+                  <li>Электро</li>
+                  <li>283 л.с.</li>
+                  <li>AWD</li>
+                </ul>
+                <div class="vehicle-bottom">
+                  <span class="seller"><strong>Частный продавец</strong> · Астана · 2 часа назад</span>
+                  <div class="vehicle-actions">
+                    <a class="button button-outline" href="#">Сравнить</a>
+                    <a class="button button-primary" href="#">Подробнее</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="vehicle-card">
+              <div class="vehicle-image">
+                <img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=900&q=80" alt="BMW на дороге">
+                <span class="image-badge">Дилер</span>
+              </div>
+              <div class="vehicle-body">
+                <div class="vehicle-top">
+                  <div class="vehicle-title">
+                    <h2>BMW 320d xDrive</h2>
+                    <p>Дизель, экономичный расход, расширенная гарантия дилера</p>
+                  </div>
+                  <div class="price">$31 000</div>
+                </div>
+                <ul class="meta">
+                  <li>2020</li>
+                  <li>55 000 км</li>
+                  <li>Дизель</li>
+                  <li>190 л.с.</li>
+                  <li>Полный привод</li>
+                </ul>
+                <div class="vehicle-bottom">
+                  <span class="seller"><strong>Premium Cars</strong> · Алматы · вчера</span>
+                  <div class="vehicle-actions">
+                    <a class="button button-outline" href="#">Сравнить</a>
+                    <a class="button button-primary" href="#">Подробнее</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="vehicle-card">
+              <div class="vehicle-image">
+                <img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=900&q=80" alt="Внедорожник Hyundai Tucson">
+                <span class="image-badge">Новая цена</span>
+              </div>
+              <div class="vehicle-body">
+                <div class="vehicle-top">
+                  <div class="vehicle-title">
+                    <h2>Hyundai Tucson</h2>
+                    <p>Городской кроссовер, богатая комплектация, камера 360</p>
+                  </div>
+                  <div class="price">$28 500</div>
+                </div>
+                <ul class="meta">
+                  <li>2021</li>
+                  <li>36 000 км</li>
+                  <li>Бензин</li>
+                  <li>187 л.с.</li>
+                  <li>Автомат</li>
+                </ul>
+                <div class="vehicle-bottom">
+                  <span class="seller"><strong>Частный продавец</strong> · Шымкент · вчера</span>
+                  <div class="vehicle-actions">
+                    <a class="button button-outline" href="#">Сравнить</a>
+                    <a class="button button-primary" href="#">Подробнее</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="vehicle-card">
+              <div class="vehicle-image">
+                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80" alt="Mercedes-Benz C-Class">
+                <span class="image-badge">Без ДТП</span>
+              </div>
+              <div class="vehicle-body">
+                <div class="vehicle-top">
+                  <div class="vehicle-title">
+                    <h2>Mercedes-Benz C 200</h2>
+                    <p>Аккуратный кузов, салон в отличном состоянии, зимний комплект</p>
+                  </div>
+                  <div class="price">$36 200</div>
+                </div>
+                <ul class="meta">
+                  <li>2020</li>
+                  <li>48 000 км</li>
+                  <li>Бензин</li>
+                  <li>184 л.с.</li>
+                  <li>Автомат</li>
+                </ul>
+                <div class="vehicle-bottom">
+                  <span class="seller"><strong>Star Motors</strong> · Астана · 2 дня назад</span>
+                  <div class="vehicle-actions">
+                    <a class="button button-outline" href="#">Сравнить</a>
+                    <a class="button button-primary" href="#">Подробнее</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="vehicle-table-wrap">
+            <table class="vehicle-table">
+              <thead>
+                <tr>
+                  <th>Фото</th>
+                  <th>Автомобиль</th>
+                  <th>Год</th>
+                  <th>Пробег</th>
+                  <th>Топливо</th>
+                  <th>Мощность</th>
+                  <th>Продавец</th>
+                  <th>Цена</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="table-photo" style="--preview: url('https://images.unsplash.com/photo-1549927681-0b673b8243ab?auto=format&fit=crop&w=900&q=80')"><img src="https://images.unsplash.com/photo-1549927681-0b673b8243ab?auto=format&fit=crop&w=300&q=80" alt="Toyota Camry"></span></td>
+                  <td><span class="table-title">Toyota Camry 2.5</span><span class="table-subtitle">Один владелец, сервисная история</span></td>
+                  <td>2021</td>
+                  <td>42 000 км</td>
+                  <td>Бензин</td>
+                  <td>203 л.с.</td>
+                  <td>Дилер AutoLine</td>
+                  <td><strong>$26 000</strong></td>
+                  <td><a class="button button-outline" href="#">Открыть</a></td>
+                </tr>
+                <tr>
+                  <td><span class="table-photo" style="--preview: url('https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=900&q=80')"><img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=300&q=80" alt="Tesla Model 3"></span></td>
+                  <td><span class="table-title">Tesla Model 3 Long Range</span><span class="table-subtitle">Полный привод, домашняя зарядка</span></td>
+                  <td>2022</td>
+                  <td>18 000 км</td>
+                  <td>Электро</td>
+                  <td>283 л.с.</td>
+                  <td>Частный продавец</td>
+                  <td><strong>$39 000</strong></td>
+                  <td><a class="button button-outline" href="#">Открыть</a></td>
+                </tr>
+                <tr>
+                  <td><span class="table-photo" style="--preview: url('https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=900&q=80')"><img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=300&q=80" alt="BMW 320d"></span></td>
+                  <td><span class="table-title">BMW 320d xDrive</span><span class="table-subtitle">Дизель, расширенная гарантия</span></td>
+                  <td>2020</td>
+                  <td>55 000 км</td>
+                  <td>Дизель</td>
+                  <td>190 л.с.</td>
+                  <td>Premium Cars</td>
+                  <td><strong>$31 000</strong></td>
+                  <td><a class="button button-outline" href="#">Открыть</a></td>
+                </tr>
+                <tr>
+                  <td><span class="table-photo" style="--preview: url('https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=900&q=80')"><img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?auto=format&fit=crop&w=300&q=80" alt="Hyundai Tucson"></span></td>
+                  <td><span class="table-title">Hyundai Tucson</span><span class="table-subtitle">Кроссовер, камера 360</span></td>
+                  <td>2021</td>
+                  <td>36 000 км</td>
+                  <td>Бензин</td>
+                  <td>187 л.с.</td>
+                  <td>Частный продавец</td>
+                  <td><strong>$28 500</strong></td>
+                  <td><a class="button button-outline" href="#">Открыть</a></td>
+                </tr>
+                <tr>
+                  <td><span class="table-photo" style="--preview: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80')"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=300&q=80" alt="Mercedes-Benz C 200"></span></td>
+                  <td><span class="table-title">Mercedes-Benz C 200</span><span class="table-subtitle">Без ДТП, зимний комплект</span></td>
+                  <td>2020</td>
+                  <td>48 000 км</td>
+                  <td>Бензин</td>
+                  <td>184 л.с.</td>
+                  <td>Star Motors</td>
+                  <td><strong>$36 200</strong></td>
+                  <td><a class="button button-outline" href="#">Открыть</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </div>
+
+          <div class="bottom-bar">
+            <label class="per-page">
+              <span>Показывать</span>
+              <select class="control" aria-label="Количество элементов на страницу">
+                <option>10</option>
+                <option selected>20</option>
+                <option>50</option>
+                <option>100</option>
+              </select>
+              <span>на странице</span>
+            </label>
+
+            <nav class="pagination" aria-label="Страницы каталога">
+              <a class="page-button active" href="#">1</a>
+              <a class="page-button" href="#">2</a>
+              <a class="page-button" href="#">3</a>
+              <a class="page-button" href="#">4</a>
+              <a class="page-button" href="#">...</a>
+            </nav>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>AutoPlace, 2026</span>
+        <span>Каталог · Проверка · Сделка</span>
+      </div>
+    </footer>
+  </div>
+  <script src="assets/js/catalog.js"></script>
+</body>
+</html>

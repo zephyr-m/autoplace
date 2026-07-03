@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Jobs;
+
+use App\Actions\VehicleFilterMatcher;
+use App\Models\CatalogVehicle;
+use App\Models\FilterSubscription;
+use App\Models\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Queue\Queueable;
+
+class ProcessVehicleSubscriptions implements ShouldQueue
+{
+    use Queueable;
+
+    public function __construct(public int $vehicleId) {}
+
+    public function handle(VehicleFilterMatcher $matcher): void
+    {
+        $vehicle = CatalogVehicle::query()->findOrFail($this->vehicleId);
+
+        FilterSubscription::query()
+            ->where('status', FilterSubscription::STATUS_ACTIVE)
+            ->orderBy('id')
+            ->chunkById(100, function ($subscriptions) use ($matcher, $vehicle): void {
+                foreach ($subscriptions as $subscription) {
+                    if (! $matcher->matches($vehicle, $subscription->filter ?? [])) {
+                        continue;
+                    }
+
+                    Notification::query()->firstOrCreate(
+                        [
+                            'subscription_id' => $subscription->id,
+                            'vehicle_id' => $vehicle->id,
+                            'type' => Notification::TYPE_VEHICLE_MATCH,
+                        ],
+                        [
+                            'payload' => [
+                                'vehicle' => [
+                                    'id' => $vehicle->id,
+                                    'make_id' => $vehicle->make_id,
+                                    'model_id' => $vehicle->model_id,
+                                    'make' => $vehicle->make,
+                                    'model' => $vehicle->model,
+                                    'price' => $vehicle->price,
+                                    'mileage' => $vehicle->mileage,
+                                    'power' => $vehicle->power,
+                                    'fuel_type' => $vehicle->fuel_type,
+                                    'year' => $vehicle->year,
+                                ],
+                                'matched_filter' => $subscription->filter,
+                            ],
+                        ],
+                    );
+                }
+            });
+    }
+}

@@ -1,0 +1,132 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: cars
+      POSTGRES_USER: cars
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cars -d cars"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    environment:
+      APP_NAME: "Car Match"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://autoplace.127.0.0.1.sslip.io:8080
+      SESSION_DOMAIN: .127.0.0.1.sslip.io
+      FILAMENT_ADMIN_DOMAIN: admin.autoplace.127.0.0.1.sslip.io
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: cars
+      DB_USERNAME: cars
+      DB_PASSWORD: secret
+      QUEUE_CONNECTION: database
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+      - vendor-data:/var/www/html/vendor
+      - node-modules:/var/www/html/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "test -f .env || cp .env.example .env &&
+             composer install &&
+             npm install &&
+             php artisan key:generate --force &&
+             php artisan migrate --seed --force &&
+             php artisan serve --host=0.0.0.0 --port=8000"
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      app:
+        condition: service_started
+
+  queue:
+    build: .
+    environment:
+      APP_NAME: "Car Match"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://autoplace.127.0.0.1.sslip.io:8080
+      SESSION_DOMAIN: .127.0.0.1.sslip.io
+      FILAMENT_ADMIN_DOMAIN: admin.autoplace.127.0.0.1.sslip.io
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: cars
+      DB_USERNAME: cars
+      DB_PASSWORD: secret
+      QUEUE_CONNECTION: database
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+    volumes:
+      - .:/var/www/html
+      - vendor-data:/var/www/html/vendor
+    depends_on:
+      app:
+        condition: service_started
+    command: >
+      sh -c "until php artisan migrate:status >/dev/null 2>&1; do sleep 2; done;
+             php artisan queue:work --tries=3 --sleep=1"
+
+  scheduler:
+    build: .
+    environment:
+      APP_NAME: "Car Match"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://autoplace.127.0.0.1.sslip.io:8080
+      SESSION_DOMAIN: .127.0.0.1.sslip.io
+      FILAMENT_ADMIN_DOMAIN: admin.autoplace.127.0.0.1.sslip.io
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: cars
+      DB_USERNAME: cars
+      DB_PASSWORD: secret
+      QUEUE_CONNECTION: database
+      SESSION_DRIVER: database
+      CACHE_STORE: database
+    volumes:
+      - .:/var/www/html
+      - vendor-data:/var/www/html/vendor
+    depends_on:
+      app:
+        condition: service_started
+    command: >
+      sh -c "until php artisan migrate:status >/dev/null 2>&1; do sleep 2; done;
+             php artisan schedule:work"
+
+  vite:
+    build: .
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/var/www/html
+      - vendor-data:/var/www/html/vendor
+      - node-modules:/var/www/html/node_modules
+    command: npm run dev -- --host=0.0.0.0
+
+volumes:
+  postgres-data:
+  vendor-data:
+  node-modules:

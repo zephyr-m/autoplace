@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Уведомления - AutoPlace</title>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/account.css">
+  <script src="assets/js/account-menu.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/img/light.png" alt="AutoPlace">
+        </a>
+        <nav class="nav" aria-label="Основная навигация">
+          <a href="catalog.html">Каталог</a>
+          <a href="pricing.html">Тарифы</a>
+          <a href="dealer-offer.html">Для дилеров</a>
+          <a class="active" href="account.html">Кабинет</a>
+          <a href="#">Продать авто</a>
+          <a href="#">Помощь</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-outline" href="settings.html">Настройки</a>
+          <a class="button button-primary" href="catalog.html">В каталог</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="account-hero">
+        <div class="container account-hero-inner">
+          <div>
+            <div class="breadcrumbs">
+              <a href="index.html">Главная</a>
+              <span>/</span>
+              <a href="account.html">Кабинет</a>
+              <span>/</span>
+              <span>Уведомления</span>
+            </div>
+            <h1>Уведомления</h1>
+            <p class="subtitle">Все важные события по поискам, избранным автомобилям и диалогам с продавцами в одном месте.</p>
+          </div>
+          <div class="profile-card">
+            <div class="avatar">18</div>
+            <div>
+              <strong>Новых за неделю</strong>
+              <span>6 требуют внимания</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container account-layout">
+        <account-sidebar active="notifications"></account-sidebar>
+
+        <div class="account-content">
+          <section class="panel notification-toolbar">
+            <div class="segment-control" aria-label="Фильтр уведомлений">
+              <button class="segment active" type="button">Все</button>
+              <button class="segment" type="button">Поиски</button>
+              <button class="segment" type="button">Избранное</button>
+              <button class="segment" type="button">Сообщения</button>
+            </div>
+            <div class="toolbar-actions">
+              <select class="control">
+                <option>Сначала новые</option>
+                <option>Только непрочитанные</option>
+                <option>Важные сверху</option>
+              </select>
+              <button class="button button-outline" type="button">Отметить прочитанными</button>
+            </div>
+          </section>
+
+          <section class="notifications-layout">
+            <div class="notification-list">
+              <article class="notification-card unread">
+                <div class="notification-icon">⌕</div>
+                <div>
+                  <div class="notification-top">
+                    <h2>Новое совпадение по поиску Toyota Camry</h2>
+                    <span>10 минут назад</span>
+                  </div>
+                  <p>Появился Toyota Camry 2021 за $26 000 в Алматы. Подходит под фильтр “до $30 000, пробег до 80 000 км”.</p>
+                  <div class="notification-actions">
+                    <a class="button button-primary" href="catalog.html">Посмотреть авто</a>
+                    <button class="button button-outline" type="button">Скрыть</button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="notification-card unread">
+                <div class="notification-icon">↓</div>
+                <div>
+                  <div class="notification-top">
+                    <h2>Цена снизилась на Hyundai Tucson</h2>
+                    <span>1 час назад</span>
+                  </div>
+                  <p>Автомобиль из избранного стал дешевле на $1 200. Новая цена: $28 500.</p>
+                  <div class="notification-actions">
+                    <a class="button button-primary" href="catalog.html">Открыть объявление</a>
+                    <button class="button button-outline" type="button">Позже</button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="notification-card">
+                <div class="notification-icon">✉</div>
+                <div>
+                  <div class="notification-top">
+                    <h2>Ответ продавца по Tesla Model 3</h2>
+                    <span>Вчера</span>
+                  </div>
+                  <p>Продавец отправил историю обслуживания и предложил время для осмотра.</p>
+                  <div class="notification-actions">
+                    <button class="button button-outline" type="button">Открыть диалог</button>
+                  </div>
+                </div>
+              </article>
+
+              <article class="notification-card">
+                <div class="notification-icon">✓</div>
+                <div>
+                  <div class="notification-top">
+                    <h2>Проверка истории завершена</h2>
+                    <span>2 дня назад</span>
+                  </div>
+                  <p>Отчёт по Mercedes-Benz C 200 готов. ДТП не найдено, есть подтверждённое обслуживание.</p>
+                  <div class="notification-actions">
+                    <button class="button button-outline" type="button">Скачать отчёт</button>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <aside class="panel delivery-summary">
+              <div class="panel-head compact">
+                <h2>Каналы доставки</h2>
+                <a href="settings.html">Настроить</a>
+              </div>
+              <div class="channel-summary-list">
+                <div><span class="channel-dot active"></span><strong>Email</strong><small>Включён для всех событий</small></div>
+                <div><span class="channel-dot active"></span><strong>Telegram</strong><small>Только срочные совпадения</small></div>
+                <div><span class="channel-dot"></span><strong>SMS</strong><small>Отключён</small></div>
+                <div><span class="channel-dot active"></span><strong>Push</strong><small>Избранное и сообщения</small></div>
+              </div>
+            </aside>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>AutoPlace, 2026</span>
+        <span>Каталог · Проверка · Сделка</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

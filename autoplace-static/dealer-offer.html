@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoPlace - коммерческое предложение для дилеров</title>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/dealer-offer.css">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/img/light.png" alt="AutoPlace">
+        </a>
+        <nav class="nav" aria-label="Основная навигация">
+          <a href="catalog.html">Каталог</a>
+          <a href="pricing.html">Тарифы</a>
+          <a href="dealer-offer.html" class="active">Для дилеров</a>
+          <a href="account.html">Кабинет</a>
+          <a href="#help">Помощь</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-outline" href="account.html">Войти</a>
+          <a class="button button-primary" href="#contact">Запросить демо</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="offer-hero">
+        <div class="container offer-grid">
+          <div>
+            <span class="offer-kicker">Монетизация MVP: платные горячие лиды</span>
+            <h1 class="offer-title">Продаем не показы, а готовый спрос на конкретные автомобили</h1>
+            <p class="offer-lead">AutoPlace связывает дилера с покупателями, которые уже задали фильтр: марку, модель, бюджет, год и тип топлива. Когда подходящий автомобиль появляется в каталоге, дилер получает лид с понятной причиной совпадения.</p>
+
+            <div class="offer-actions">
+              <a class="button button-primary" href="#pricing">Смотреть тарифы</a>
+              <a class="button button-outline" href="#flow">Как работает модель</a>
+            </div>
+
+            <div class="offer-points">
+              <div class="offer-point"><span class="check">✓</span><span><strong>Покупатель уже сформулировал спрос.</strong> Это не холодный показ объявления в общей выдаче.</span></div>
+              <div class="offer-point"><span class="check">✓</span><span><strong>Дилер платит за событие.</strong> Лид создается только при совпадении машины с фильтром.</span></div>
+              <div class="offer-point"><span class="check">✓</span><span><strong>Каждый лид объясним.</strong> Видно, по каким параметрам автомобиль подошел покупателю.</span></div>
+            </div>
+          </div>
+
+          <aside class="lead-demo" aria-label="Пример лидов для дилера">
+            <div class="lead-demo-header">
+              <div>
+                <strong>Входящие лиды дилера</strong>
+                <span>Сегодня · AutoPlace</span>
+              </div>
+              <span>3 новых совпадения</span>
+            </div>
+            <div class="lead-demo-body">
+              <article class="lead-card is-hot">
+                <div class="lead-top">
+                  <div>
+                    <div class="lead-name">demo-user@example.com</div>
+                    <span class="badge">Горячий лид</span>
+                  </div>
+                  <div class="lead-price">$10</div>
+                </div>
+                <ul class="lead-tags">
+                  <li>Toyota</li>
+                  <li>Camry</li>
+                  <li>до $30 000</li>
+                  <li>от 2020</li>
+                  <li>бензин</li>
+                </ul>
+                <div class="lead-meta">
+                  <span>Подошел Toyota Camry 2021 · $26 000</span>
+                  <strong>Совпадение 96%</strong>
+                </div>
+              </article>
+
+              <article class="lead-card">
+                <div class="lead-top">
+                  <div>
+                    <div class="lead-name">buyer-42@example.com</div>
+                    <span class="badge">Обычный лид</span>
+                  </div>
+                  <div class="lead-price">$3</div>
+                </div>
+                <ul class="lead-tags">
+                  <li>BMW</li>
+                  <li>до $35 000</li>
+                  <li>дизель</li>
+                </ul>
+                <div class="lead-meta">
+                  <span>Подошел BMW 320d 2020 · $31 000</span>
+                  <strong>Совпадение 78%</strong>
+                </div>
+              </article>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="flow">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>Как рождается платный лид</h2>
+              <p>Коммерческая логика повторяет техническое ядро тестового задания: фильтр покупателя, новое авто в каталоге, уведомление и фиксируемое бизнес-событие.</p>
+            </div>
+          </div>
+
+          <div class="steps">
+            <article class="step-card">
+              <span class="step-number">1</span>
+              <h3>Покупатель сохраняет фильтр</h3>
+              <p>Например: Toyota Camry, до $30 000, от 2020 года, бензин. Это сигнал реального спроса.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">2</span>
+              <h3>В каталог попадает подходящее авто</h3>
+              <p>Система проверяет новое объявление по активным фильтрам и находит точное совпадение.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">3</span>
+              <h3>Дилер получает лид</h3>
+              <p>AutoPlace отправляет уведомление покупателю и фиксирует лид для продавца с ценой и статусом.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="pricing">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>Простая тарифная сетка для MVP</h2>
+              <p>На старте не продаем сложные подписки. Показываем понятную механику оплаты за результат.</p>
+            </div>
+          </div>
+
+          <div class="pricing-grid">
+            <article class="pricing-card">
+              <h3>Обычный лид</h3>
+              <div class="pricing-value"><strong>$3</strong><span>за лид</span></div>
+              <ul>
+                <li>Совпадение по 2-3 параметрам</li>
+                <li>Контакт покупателя</li>
+                <li>Автомобиль и причина совпадения</li>
+              </ul>
+            </article>
+            <article class="pricing-card featured">
+              <h3>Горячий лид</h3>
+              <div class="pricing-value"><strong>$10</strong><span>за лид</span></div>
+              <ul>
+                <li>Марка, модель, бюджет и год</li>
+                <li>Высокая точность совпадения</li>
+                <li>Приоритет в кабинете дилера</li>
+              </ul>
+            </article>
+            <article class="pricing-card">
+              <h3>Пакет дилера</h3>
+              <div class="pricing-value"><strong>$99</strong><span>в месяц</span></div>
+              <ul>
+                <li>Кредитный лимит на лиды</li>
+                <li>История лидов и статусы</li>
+                <li>Отчеты по спросу</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="metrics">
+            <div class="metric-card"><strong>1 248</strong><span>авто в каталоге</span></div>
+            <div class="metric-card"><strong>312</strong><span>активных фильтров</span></div>
+            <div class="metric-card"><strong>84</strong><span>лида за неделю</span></div>
+            <div class="metric-card"><strong>$642</strong><span>потенциальная выручка</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>Кому это продаем</h2>
+              <p>Страница помогает держать фокус: AutoPlace зарабатывает на соединении готового спроса с продавцами автомобилей.</p>
+            </div>
+          </div>
+
+          <div class="segments">
+            <article class="segment-card">
+              <h3>Дилеры</h3>
+              <p>Получают покупателей под конкретные машины со склада и видят, какие фильтры чаще всего совпадают.</p>
+            </article>
+            <article class="segment-card">
+              <h3>Частные продавцы</h3>
+              <p>Могут разово оплатить горячий интерес к своему объявлению без месячной подписки.</p>
+            </article>
+            <article class="segment-card">
+              <h3>Партнеры сделки</h3>
+              <p>Банки, страховые и сервисы проверки получают следующий слой монетизации после лида.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="container">
+          <div class="commercial-note">
+            <strong>Вывод для MVP:</strong> мы не просто делаем каталог автомобилей. Мы строим систему, где подписки покупателей превращаются в измеримые лиды для продавцов. Это дает проекту коммерческий вектор уже на уровне первой демонстрации.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>AutoPlace, 2026</span>
+        <span>Покупательский спрос · Лиды · Дилерская выручка</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Настройки - AutoPlace</title>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/account.css">
+  <script src="assets/js/account-menu.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/img/light.png" alt="AutoPlace">
+        </a>
+        <nav class="nav" aria-label="Основная навигация">
+          <a href="catalog.html">Каталог</a>
+          <a href="pricing.html">Тарифы</a>
+          <a href="dealer-offer.html">Для дилеров</a>
+          <a class="active" href="account.html">Кабинет</a>
+          <a href="#">Продать авто</a>
+          <a href="#">Помощь</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-outline" href="notifications.html">Уведомления</a>
+          <a class="button button-primary" href="catalog.html">В каталог</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="account-hero">
+        <div class="container account-hero-inner">
+          <div>
+            <div class="breadcrumbs">
+              <a href="index.html">Главная</a>
+              <span>/</span>
+              <a href="account.html">Кабинет</a>
+              <span>/</span>
+              <span>Настройки</span>
+            </div>
+            <h1>Настройки</h1>
+            <p class="subtitle">Выберите, куда отправлять уведомления, какие события считать важными и когда не беспокоить.</p>
+          </div>
+          <div class="profile-card">
+            <div class="avatar">⚙</div>
+            <div>
+              <strong>4 канала доступны</strong>
+              <span>Email, Telegram, SMS, Push</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container account-layout">
+        <account-sidebar active="settings"></account-sidebar>
+
+        <div class="account-content">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Контакты</h2>
+                <p>Эти данные используются для связи с продавцами и доставки уведомлений.</p>
+              </div>
+            </div>
+            <form class="settings-form">
+              <label><span>Email</span><input class="control" type="email" value="maxim@example.com"></label>
+              <label><span>Telegram</span><input class="control" type="text" value="@maxim_auto"></label>
+              <label><span>Телефон</span><input class="control" type="tel" value="+7 700 000 00 00"></label>
+              <label>
+                <span>Город</span>
+                <select class="control"><option>Алматы</option><option>Астана</option><option>Шымкент</option></select>
+              </label>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Каналы уведомлений</h2>
+                <p>Можно включить несколько каналов сразу, чтобы важные совпадения не терялись.</p>
+              </div>
+              <button class="button button-outline" type="button">Проверить доставку</button>
+            </div>
+            <div class="channel-grid">
+              <article class="channel-card enabled"><div class="channel-card-head"><span class="channel-icon">✉</span><label class="switch"><input type="checkbox" checked><span></span></label></div><h3>Email</h3><p>Подробные письма с подборками, отчётами и изменениями цены.</p><small>maxim@example.com</small></article>
+              <article class="channel-card enabled"><div class="channel-card-head"><span class="channel-icon">↗</span><label class="switch"><input type="checkbox" checked><span></span></label></div><h3>Telegram</h3><p>Быстрые уведомления о новых совпадениях и ответах продавцов.</p><small>@maxim_auto</small></article>
+              <article class="channel-card"><div class="channel-card-head"><span class="channel-icon">☎</span><label class="switch"><input type="checkbox"><span></span></label></div><h3>SMS</h3><p>Короткие сообщения только для срочных событий по сделке.</p><small>+7 700 000 00 00</small></article>
+              <article class="channel-card enabled"><div class="channel-card-head"><span class="channel-icon">●</span><label class="switch"><input type="checkbox" checked><span></span></label></div><h3>Push</h3><p>Уведомления в браузере для избранного и сохранённых поисков.</p><small>Этот браузер</small></article>
+              <article class="channel-card"><div class="channel-card-head"><span class="channel-icon">W</span><label class="switch"><input type="checkbox"><span></span></label></div><h3>WhatsApp</h3><p>Альтернативный канал для сообщений от продавцов и дилеров.</p><small>Не подключён</small></article>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Какие события отправлять</h2>
+                <p>Настройте каналы по типам событий, чтобы не получать лишнее.</p>
+              </div>
+            </div>
+            <div class="preference-table">
+              <div class="preference-row head"><span>Событие</span><span>Email</span><span>Telegram</span><span>SMS</span><span>Push</span></div>
+              <div class="preference-row"><strong>Новые совпадения поиска</strong><label><input type="checkbox" checked></label><label><input type="checkbox" checked></label><label><input type="checkbox"></label><label><input type="checkbox" checked></label></div>
+              <div class="preference-row"><strong>Снижение цены в избранном</strong><label><input type="checkbox" checked></label><label><input type="checkbox" checked></label><label><input type="checkbox"></label><label><input type="checkbox" checked></label></div>
+              <div class="preference-row"><strong>Ответы продавцов</strong><label><input type="checkbox" checked></label><label><input type="checkbox" checked></label><label><input type="checkbox" checked></label><label><input type="checkbox" checked></label></div>
+              <div class="preference-row"><strong>Маркетинговые подборки</strong><label><input type="checkbox" checked></label><label><input type="checkbox"></label><label><input type="checkbox"></label><label><input type="checkbox"></label></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Тихие часы</h2>
+                <p>В это время AutoPlace не будет отправлять несрочные уведомления.</p>
+              </div>
+            </div>
+            <form class="quiet-hours">
+              <label class="switch-row"><span><strong>Включить тихие часы</strong><small>Срочные сообщения по сделке всё равно придут.</small></span><label class="switch"><input type="checkbox" checked><span></span></label></label>
+              <div class="settings-form">
+                <label><span>С</span><input class="control" type="time" value="22:00"></label>
+                <label><span>До</span><input class="control" type="time" value="08:00"></label>
+              </div>
+              <button class="button button-primary" type="button">Сохранить настройки</button>
+            </form>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>AutoPlace, 2026</span>
+        <span>Каталог · Проверка · Сделка</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoPlace - маркетплейс автомобилей</title>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/home.css">
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/img/light.png" alt="AutoPlace">
+        </a>
+        <nav class="nav" aria-label="Основная навигация">
+          <a href="catalog.html">Каталог</a>
+          <a href="pricing.html">Тарифы</a>
+          <a href="dealer-offer.html">Для дилеров</a>
+          <a href="account.html">Кабинет</a>
+          <a href="#sell">Продать авто</a>
+          <a href="#help">Помощь</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-outline" href="account.html">Войти</a>
+          <a class="button button-primary" href="#">Разместить авто</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <span class="eyebrow">Маркетплейс проверенных автомобилей</span>
+            <h1>Найдите автомобиль без лишнего шума</h1>
+            <p class="lead">AutoPlace собирает объявления от частных продавцов и дилеров в одном спокойном каталоге с понятными фильтрами, ценами и историей автомобиля.</p>
+
+            <div class="search-card" aria-label="Поиск автомобиля">
+              <div class="search-tabs">
+                <button class="tab tab-active" type="button">Купить</button>
+                <button class="tab" type="button">Новые</button>
+                <button class="tab" type="button">С пробегом</button>
+              </div>
+              <form class="search-form">
+                <div class="field">
+                  <label for="make">Марка</label>
+                  <select id="make" class="control">
+                    <option>Любая марка</option>
+                    <option>Toyota</option>
+                    <option>BMW</option>
+                    <option>Tesla</option>
+                    <option>Hyundai</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="model">Модель</label>
+                  <select id="model" class="control">
+                    <option>Любая модель</option>
+                    <option>Camry</option>
+                    <option>RAV4</option>
+                    <option>Model 3</option>
+                    <option>320d</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="price">Бюджет до</label>
+                  <select id="price" class="control">
+                    <option>До $30 000</option>
+                    <option>До $50 000</option>
+                    <option>До $80 000</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="city">Город</label>
+                  <select id="city" class="control">
+                    <option>Алматы</option>
+                    <option>Астана</option>
+                    <option>Шымкент</option>
+                  </select>
+                </div>
+                <button class="button button-primary search-submit" type="button">Показать 1 248 автомобилей</button>
+              </form>
+            </div>
+
+            <div class="stats" aria-label="Статистика каталога">
+              <div class="stat">
+                <strong>1 248</strong>
+                <span>активных объявлений</span>
+              </div>
+              <div class="stat">
+                <strong>82%</strong>
+                <span>с проверенной историей</span>
+              </div>
+              <div class="stat">
+                <strong>24 ч</strong>
+                <span>среднее время ответа</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="showcase" aria-label="Избранные автомобили">
+            <article class="featured-card">
+              <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80" alt="Серый спортивный автомобиль на дороге">
+              <div class="featured-body">
+                <div>
+                  <h2>Porsche 911 Carrera</h2>
+                  <p>2021 · 18 000 км · бензин</p>
+                </div>
+                <div class="price">$118 900</div>
+              </div>
+            </article>
+
+            <div class="mini-grid">
+              <article class="mini-card">
+                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=800&q=80" alt="Красный автомобиль Chevrolet">
+                <div>
+                  <strong>Chevrolet Camaro</strong>
+                  <span>2019 · $42 500</span>
+                </div>
+              </article>
+              <article class="mini-card">
+                <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=800&q=80" alt="Чёрный автомобиль на парковке">
+                <div>
+                  <strong>Mercedes-Benz C-Class</strong>
+                  <span>2020 · $36 200</span>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="catalog">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>Свежие предложения</h2>
+              <p>Каталог строится вокруг быстрых решений: цена, год, пробег и продавец видны сразу.</p>
+            </div>
+            <a class="button button-outline" href="catalog.html">Открыть весь каталог</a>
+          </div>
+
+          <div class="catalog">
+            <article class="car-card">
+              <img src="https://images.unsplash.com/photo-1549927681-0b673b8243ab?auto=format&fit=crop&w=900&q=80" alt="Белый седан Toyota">
+              <div class="car-content">
+                <div class="car-title">
+                  <span>Toyota Camry</span>
+                  <span>$26 000</span>
+                </div>
+                <ul class="meta">
+                  <li>2021</li>
+                  <li>42 000 км</li>
+                  <li>Бензин</li>
+                  <li>203 л.с.</li>
+                </ul>
+                <div class="card-footer">
+                  <span class="seller">Дилер · Алматы</span>
+                  <a class="button button-outline" href="#">Подробнее</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="car-card">
+              <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&w=900&q=80" alt="Электромобиль Tesla в городе">
+              <div class="car-content">
+                <div class="car-title">
+                  <span>Tesla Model 3</span>
+                  <span>$39 000</span>
+                </div>
+                <ul class="meta">
+                  <li>2022</li>
+                  <li>18 000 км</li>
+                  <li>Электро</li>
+                  <li>283 л.с.</li>
+                </ul>
+                <div class="card-footer">
+                  <span class="seller">Частный продавец · Астана</span>
+                  <a class="button button-outline" href="#">Подробнее</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="car-card">
+              <img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=900&q=80" alt="BMW на дороге">
+              <div class="car-content">
+                <div class="car-title">
+                  <span>BMW 320d</span>
+                  <span>$31 000</span>
+                </div>
+                <ul class="meta">
+                  <li>2020</li>
+                  <li>55 000 км</li>
+                  <li>Дизель</li>
+                  <li>190 л.с.</li>
+                </ul>
+                <div class="card-footer">
+                  <span class="seller">Дилер · Алматы</span>
+                  <a class="button button-outline" href="#">Подробнее</a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>AutoPlace, 2026</span>
+        <span>Каталог · Проверка · Сделка</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

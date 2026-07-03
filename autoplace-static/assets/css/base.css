@@ -1,0 +1,196 @@
+:root {
+  --background: #ffffff;
+  --foreground: #09090b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --card: #ffffff;
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
+  --ring: rgb(24 24 27 / 0.14);
+  --radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.page {
+  min-height: 100vh;
+}
+
+.container {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 550;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.button-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.button-primary:hover {
+  background: #27272a;
+}
+
+.button-outline {
+  border-color: var(--border);
+  background: #fff;
+  color: var(--foreground);
+}
+
+.button-outline:hover {
+  background: var(--muted);
+}
+
+.button-ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted-foreground);
+}
+
+.button-ghost:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.control {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 0 11px;
+  color: var(--foreground);
+  outline: none;
+}
+
+.control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0 10px;
+  background: #fff;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+a[href="#"],
+a[href="#sell"],
+a[href="#dealers"],
+a[href="#help"],
+.is-stub {
+  color: #b45309 !important;
+}
+
+a[href="#"] *,
+a[href="#sell"] *,
+a[href="#dealers"] *,
+a[href="#help"] *,
+.is-stub * {
+  color: #b45309 !important;
+}
+
+a[href="#"]:hover,
+a[href="#sell"]:hover,
+a[href="#dealers"]:hover,
+a[href="#help"]:hover,
+.is-stub:hover {
+  color: #92400e !important;
+}
+
+a[href="#"]:hover *,
+a[href="#sell"]:hover *,
+a[href="#dealers"]:hover *,
+a[href="#help"]:hover *,
+.is-stub:hover * {
+  color: #92400e !important;
+}
+
+a.button[href="#"],
+a.button[href="#sell"],
+a.button[href="#dealers"],
+a.button[href="#help"],
+.button.is-stub {
+  border-color: #f59e0b !important;
+  background: #fffbeb !important;
+  color: #92400e !important;
+}
+
+a.button[href="#"]:hover,
+a.button[href="#sell"]:hover,
+a.button[href="#dealers"]:hover,
+a.button[href="#help"]:hover,
+.button.is-stub:hover {
+  border-color: #d97706 !important;
+  background: #fef3c7 !important;
+  color: #78350f !important;
+}
+
+a.button-primary[href="#"],
+a.button-primary[href="#sell"],
+a.button-primary[href="#dealers"],
+a.button-primary[href="#help"],
+.button-primary.is-stub {
+  border-color: #f59e0b !important;
+  background: #f59e0b !important;
+  color: #18181b !important;
+}
+
+a.button-primary[href="#"]:hover,
+a.button-primary[href="#sell"]:hover,
+a.button-primary[href="#dealers"]:hover,
+a.button-primary[href="#help"]:hover,
+.button-primary.is-stub:hover {
+  border-color: #d97706 !important;
+  background: #d97706 !important;
+  color: #18181b !important;
+}
+
+@media (max-width: 620px) {
+  .container {
+    width: min(100% - 24px, 1180px);
+  }
+}
