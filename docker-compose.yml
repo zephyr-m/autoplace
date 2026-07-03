@@ -17,6 +17,11 @@ services:
 
   app:
     build: .
+    healthcheck:
+      test: ["CMD", "php", "artisan", "about"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     environment:
       APP_NAME: "Car Match"
       APP_ENV: local
@@ -47,7 +52,7 @@ services:
              composer install &&
              npm install &&
              php artisan key:generate --force &&
-             php artisan migrate --seed --force &&
+             php artisan migrate:fresh --seed &&
              php artisan serve --host=0.0.0.0 --port=8000"
 
   caddy:
@@ -126,7 +131,87 @@ services:
       - node-modules:/var/www/html/node_modules
     command: npm run dev -- --host=0.0.0.0
 
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: homepage.127.0.0.1.sslip.io:8080
+    volumes:
+      - ./homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - caddy
+
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_CONTENT_SECURITY_POLICY: "false"
+
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus:ro
+      - prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    volumes:
+      - ./monitoring/alertmanager:/etc/alertmanager:ro
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+
+  loki:
+    image: grafana/loki:latest
+    volumes:
+      - ./monitoring/loki:/etc/loki:ro
+      - loki-data:/loki
+    command:
+      - -config.file=/etc/loki/loki.yml
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - ./monitoring/promtail:/etc/promtail:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command:
+      - -config.file=/etc/promtail/promtail.yml
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    volumes:
+      - uptime-kuma-data:/app/data
+
+  
+
+
+
 volumes:
   postgres-data:
   vendor-data:
   node-modules:
+  grafana-data:
+  prometheus-data:
+  loki-data:
+  uptime-kuma-data:

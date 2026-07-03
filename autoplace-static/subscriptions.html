@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Подписки - AutoPlace</title>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/account.css">
+  <script src="assets/js/account-menu.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img class="brand-logo" src="assets/img/light.png" alt="AutoPlace">
+        </a>
+        <nav class="nav" aria-label="Основная навигация">
+          <a href="catalog.html">Каталог</a>
+          <a href="pricing.html">Тарифы</a>
+          <a href="dealer-offer.html">Для дилеров</a>
+          <a class="active" href="account.html">Кабинет</a>
+          <a href="#">Продать авто</a>
+          <a href="#">Помощь</a>
+        </nav>
+        <div class="header-actions">
+          <a class="button button-outline" href="notifications.html">Уведомления</a>
+          <a class="button button-primary" href="catalog.html">Новая подписка</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="account-hero">
+        <div class="container account-hero-inner">
+          <div>
+            <div class="breadcrumbs">
+              <a href="index.html">Главная</a>
+              <span>/</span>
+              <a href="account.html">Кабинет</a>
+              <span>/</span>
+              <span>Подписки</span>
+            </div>
+            <h1>Подписки</h1>
+            <p class="subtitle">Управляйте фильтрами, по которым AutoPlace отслеживает новые автомобили и отправляет уведомления.</p>
+          </div>
+          <div class="profile-card">
+            <div class="avatar">4</div>
+            <div>
+              <strong>Активные подписки</strong>
+              <span>18 совпадений за неделю</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="container account-layout">
+        <account-sidebar active="subscriptions"></account-sidebar>
+
+        <div class="account-content">
+          <section class="metric-grid" aria-label="Сводка по подпискам">
+            <article class="metric-card">
+              <span>Активные</span>
+              <strong>4</strong>
+              <p>Email и Telegram включены</p>
+            </article>
+            <article class="metric-card">
+              <span>Новые совпадения</span>
+              <strong>18</strong>
+              <p>За последние 7 дней</p>
+            </article>
+            <article class="metric-card">
+              <span>Пауза</span>
+              <strong>1</strong>
+              <p>Можно включить в любой момент</p>
+            </article>
+          </section>
+
+          <section class="panel subscription-toolbar">
+            <div class="segment-control" aria-label="Фильтр подписок">
+              <button class="segment active" type="button">Все</button>
+              <button class="segment" type="button">Активные</button>
+              <button class="segment" type="button">На паузе</button>
+            </div>
+            <a class="button button-primary" href="catalog.html">Создать подписку</a>
+          </section>
+
+          <section class="subscription-list" aria-label="Список подписок">
+            <article class="subscription-card">
+              <div class="subscription-main">
+                <div>
+                  <span class="status-pill active">Активна</span>
+                  <h2>Toyota Camry до $30 000</h2>
+                  <p>Алматы · 2020-2024 · пробег до 80 000 км · бензин</p>
+                </div>
+                <strong>6 новых</strong>
+              </div>
+              <div class="subscription-meta">
+                <span>Email</span>
+                <span>Telegram</span>
+                <span>Push</span>
+              </div>
+              <div class="subscription-actions">
+                <a class="button button-outline" href="catalog.html">Открыть каталог</a>
+                <button class="button button-outline" type="button">Пауза</button>
+                <button class="button button-outline" type="button">Изменить</button>
+              </div>
+            </article>
+
+            <article class="subscription-card">
+              <div class="subscription-main">
+                <div>
+                  <span class="status-pill active">Активна</span>
+                  <h2>Электромобили до $45 000</h2>
+                  <p>Астана · Tesla, Hyundai · от 2021 года · пробег до 60 000 км</p>
+                </div>
+                <strong>2 новых</strong>
+              </div>
+              <div class="subscription-meta">
+                <span>Email</span>
+                <span>Push</span>
+              </div>
+              <div class="subscription-actions">
+                <a class="button button-outline" href="catalog.html">Открыть каталог</a>
+                <button class="button button-outline" type="button">Пауза</button>
+                <button class="button button-outline" type="button">Изменить</button>
+              </div>
+            </article>
+
+            <article class="subscription-card muted">
+              <div class="subscription-main">
+                <div>
+                  <span class="status-pill paused">Пауза</span>
+                  <h2>BMW дизель</h2>
+                  <p>Любой город · до 60 000 км · только дилеры · без ДТП</p>
+                </div>
+                <strong>0 новых</strong>
+              </div>
+              <div class="subscription-meta">
+                <span>Email</span>
+              </div>
+              <div class="subscription-actions">
+                <a class="button button-outline" href="catalog.html">Открыть каталог</a>
+                <button class="button button-primary" type="button">Возобновить</button>
+                <button class="button button-outline" type="button">Изменить</button>
+              </div>
+            </article>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <span>AutoPlace, 2026</span>
+        <span>Каталог · Проверка · Сделка</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

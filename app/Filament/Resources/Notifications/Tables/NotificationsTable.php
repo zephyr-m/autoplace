@@ -22,10 +22,10 @@ class NotificationsTable
                 TextColumn::make('vehicle.source_reference')
                     ->label('Автомобиль')
                     ->searchable(),
-                TextColumn::make('vehicle.make')
+                TextColumn::make('vehicle.make.name')
                     ->label('Марка')
                     ->searchable(),
-                TextColumn::make('vehicle.model')
+                TextColumn::make('vehicle.model.name')
                     ->label('Модель')
                     ->searchable(),
                 TextColumn::make('type')

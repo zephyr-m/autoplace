@@ -1,0 +1,11 @@
+groups:
+  - name: docker
+    rules:
+      - alert: DockerContainerMissing
+        expr: up{job="app"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "AutoPlace app is down"
+          description: "Laravel app не отвечает на health endpoint"

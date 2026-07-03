@@ -12,10 +12,11 @@ return new class extends Migration
             $table->id();
             $table->string('user_identifier');
             $table->json('filter');
-            $table->string('status')->default('active');
+            $table->unsignedTinyInteger('status')->default(1)->comment('Статус подписки');
             $table->timestamps();
 
-            $table->index(['user_identifier', 'status']);
+            $table->index('user_identifier', 'filter_subscriptions_user_identifier_index');
+            $table->index('status', 'filter_subscriptions_status_index');
         });
     }
 

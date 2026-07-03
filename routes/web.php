@@ -8,6 +8,10 @@ use Inertia\Inertia;
 
 Route::get('/', fn () => Inertia::render('Home'))->name('home');
 
+Route::get('/health/metrics', fn () => response("app_up 1\n", 200, [
+    'Content-Type' => 'text/plain; version=0.0.4',
+]))->name('health.metrics');
+
 Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
 Route::post('/subscriptions', [SubscriptionController::class, 'store'])->name('subscriptions.store');
 Route::delete('/subscriptions/{subscription}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');

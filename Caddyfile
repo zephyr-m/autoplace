@@ -6,3 +6,27 @@ http://admin.autoplace.127.0.0.1.sslip.io {
     redir / /admin
     reverse_proxy app:8000
 }
+
+http://homepage.127.0.0.1.sslip.io {
+    reverse_proxy homepage:3000
+}
+
+http://dozzle.127.0.0.1.sslip.io {
+    reverse_proxy dozzle:8080
+}
+
+http://grafana.127.0.0.1.sslip.io {
+    reverse_proxy grafana:3000
+}
+
+http://prometheus.127.0.0.1.sslip.io {
+    reverse_proxy prometheus:9090
+}
+
+http://alertmanager.127.0.0.1.sslip.io {
+    reverse_proxy alertmanager:9093
+}
+
+http://kuma.127.0.0.1.sslip.io {
+    reverse_proxy uptime-kuma:3001
+}

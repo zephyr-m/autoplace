@@ -1,0 +1,7 @@
+  title: AutoPlace
+  theme: light
+  color: slate
+  layout:
+    AutoPlace:
+      style: row
+      columns: 4

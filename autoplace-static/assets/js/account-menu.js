@@ -4,7 +4,7 @@ class AccountSidebar extends HTMLElement {
     const items = [
       { key: 'overview', href: 'account.html', icon: '⌂', label: 'Обзор' },
       { key: 'favorites', href: 'account.html#favorites', icon: '♡', label: 'Избранное', stub: true },
-      { key: 'searches', href: 'account.html#searches', icon: '⌕', label: 'Сохранённые поиски', stub: true },
+      { key: 'subscriptions', href: 'subscriptions.html', icon: '⌕', label: 'Подписки' },
       { key: 'notifications', href: 'notifications.html', icon: '●', label: 'Уведомления' },
       { key: 'messages', href: 'account.html#messages', icon: '✉', label: 'Сообщения', stub: true },
       { key: 'settings', href: 'settings.html', icon: '⚙', label: 'Настройки' },

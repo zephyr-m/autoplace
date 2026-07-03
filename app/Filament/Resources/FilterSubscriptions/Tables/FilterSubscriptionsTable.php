@@ -22,12 +22,12 @@ class FilterSubscriptionsTable
                 TextColumn::make('status')
                     ->label('Статус')
                     ->badge()
-                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                    ->formatStateUsing(fn (int $state): string => match ($state) {
                         FilterSubscription::STATUS_ACTIVE => 'Активна',
                         FilterSubscription::STATUS_PAUSED => 'На паузе',
                         default => $state,
                     })
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn (int $state): string => match ($state) {
                         FilterSubscription::STATUS_ACTIVE => 'success',
                         FilterSubscription::STATUS_PAUSED => 'gray',
                         default => 'gray',
