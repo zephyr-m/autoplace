@@ -23,18 +23,10 @@ class CatalogVehiclesTable
                 TextColumn::make('source_reference')
                     ->label('Внешний ID')
                     ->searchable(),
-                TextColumn::make('make_id')
-                    ->label('ID марки')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('model_id')
-                    ->label('ID модели')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('make')
+                TextColumn::make('make.name')
                     ->label('Марка')
                     ->searchable(),
-                TextColumn::make('model')
+                TextColumn::make('model.name')
                     ->label('Модель')
                     ->searchable(),
                 TextColumn::make('price')

@@ -13,9 +13,7 @@ class VehicleFilterMatcher
      */
     public function matches(CatalogVehicle $vehicle, array $filter): bool
     {
-        return $this->equalsIfPresent($filter, 'make', $vehicle->make)
-            && $this->equalsIfPresent($filter, 'model', $vehicle->model)
-            && $this->integerEqualsIfPresent($filter, 'make_id', $vehicle->make_id)
+        return $this->integerEqualsIfPresent($filter, 'make_id', $vehicle->make_id)
             && $this->integerEqualsIfPresent($filter, 'model_id', $vehicle->model_id)
             && $this->minIfPresent($filter, 'min_price', $vehicle->price)
             && $this->maxIfPresent($filter, 'max_price', $vehicle->price)
@@ -32,8 +30,6 @@ class VehicleFilterMatcher
     {
         return collect($input)
             ->only([
-                'make',
-                'model',
                 'make_id',
                 'model_id',
                 'min_price',
@@ -50,14 +46,14 @@ class VehicleFilterMatcher
             ->all();
     }
 
-    private function equalsIfPresent(array $filter, string $key, string $actual): bool
-    {
-        return ! array_key_exists($key, $filter) || mb_strtolower((string) $filter[$key]) === mb_strtolower($actual);
-    }
-
     private function integerEqualsIfPresent(array $filter, string $key, int $actual): bool
     {
         return ! array_key_exists($key, $filter) || (int) $filter[$key] === $actual;
+    }
+
+    private function equalsIfPresent(array $filter, string $key, string $actual): bool
+    {
+        return ! array_key_exists($key, $filter) || mb_strtolower((string) $filter[$key]) === mb_strtolower($actual);
     }
 
     private function minIfPresent(array $filter, string $key, int $actual): bool

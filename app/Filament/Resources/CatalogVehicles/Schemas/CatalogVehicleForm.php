@@ -18,26 +18,22 @@ class CatalogVehicleForm
                     ->label('Внешний ID')
                     ->helperText('Идемпотентный идентификатор события из внутренней системы.')
                     ->maxLength(255),
-                TextInput::make('make_id')
-                    ->label('ID марки')
-                    ->required()
-                    ->integer()
-                    ->minValue(1)
-                    ->numeric(),
-                TextInput::make('model_id')
-                    ->label('ID модели')
-                    ->required()
-                    ->integer()
-                    ->minValue(1)
-                    ->numeric(),
-                TextInput::make('make')
+                Select::make('source_id')
+                    ->label('Источник')
+                    ->relationship('source', 'name')
+                    ->required(),
+                Select::make('make_id')
                     ->label('Марка')
+                    ->relationship('make', 'name')
                     ->required()
-                    ->maxLength(80),
-                TextInput::make('model')
+                    ->searchable()
+                    ->preload(),
+                Select::make('model_id')
                     ->label('Модель')
+                    ->relationship('model', 'name')
                     ->required()
-                    ->maxLength(80),
+                    ->searchable()
+                    ->preload(),
                 TextInput::make('price')
                     ->label('Цена')
                     ->required()
@@ -79,7 +75,7 @@ class CatalogVehicleForm
                     ->minValue(1950)
                     ->maxValue(((int) date('Y')) + 1)
                     ->numeric(),
-                KeyValue::make('payload')
+                KeyValue::make('raw_payload')
                     ->label('Payload')
                     ->keyLabel('Ключ')
                     ->valueLabel('Значение')

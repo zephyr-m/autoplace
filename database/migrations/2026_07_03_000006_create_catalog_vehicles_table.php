@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('source_id')
                 ->constrained('import_sources')
                 ->cascadeOnUpdate()
+                ->nullable()
                 ->restrictOnDelete();
             $table->string('source_reference');
             $table->foreignId('make_id')

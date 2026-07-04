@@ -64,11 +64,14 @@ Admin sections:
 
 ## Demo Flow
 
-1. Open `/subscriptions`.
-2. Create a subscription. Example: `make_id=1`, `model_id=10`, `max_price=30000`, `fuel_type=gasoline`, `year_from=2020`.
-3. Open `/admin/vehicles`.
-4. Add a vehicle event matching the subscription. Example: Toyota Camry, `make_id=1`, `model_id=10`, price `26000`, fuel `gasoline`, year `2021`.
-5. Open `/notifications` and see the generated notification.
+The public frontend currently keeps only the main AutoPlace page. The catalog,
+subscription, and notification workflow is demonstrated through Filament, API,
+Artisan commands, and tests.
+
+1. Open `/admin`.
+2. Inspect or create filter subscriptions. Example: `make_id=1`, `model_id=1`, `max_price=30000`, `fuel_type=gasoline`, `year_from=2020`.
+3. Add or import a matching catalog vehicle. Example: Toyota Camry, `make_id=1`, `model_id=1`, price `26000`, fuel `gasoline`, year `2021`.
+4. Open generated notifications in the Filament admin panel.
 
 You can also emulate the internal system event through the API:
 
@@ -79,9 +82,7 @@ curl -X POST http://autoplace.127.0.0.1.sslip.io:8080/api/internal/catalog-vehic
   -d '{
     "source_reference": "api-camry-001",
     "make_id": 1,
-    "model_id": 10,
-    "make": "Toyota",
-    "model": "Camry",
+    "model_id": 1,
     "price": 26000,
     "mileage": 42000,
     "power": 203,

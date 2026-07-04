@@ -146,58 +146,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
-  grafana:
-    image: grafana/grafana:latest
-    environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin
-      GF_SECURITY_CONTENT_SECURITY_POLICY: "false"
-
-    volumes:
-      - grafana-data:/var/lib/grafana
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
-
-  prometheus:
-    image: prom/prometheus:latest
-    volumes:
-      - ./monitoring/prometheus:/etc/prometheus:ro
-      - prometheus-data:/prometheus
-    command:
-      - --config.file=/etc/prometheus/prometheus.yml
-
-  alertmanager:
-    image: prom/alertmanager:latest
-    volumes:
-      - ./monitoring/alertmanager:/etc/alertmanager:ro
-    command:
-      - --config.file=/etc/alertmanager/alertmanager.yml
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    privileged: true
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
-
-  loki:
-    image: grafana/loki:latest
-    volumes:
-      - ./monitoring/loki:/etc/loki:ro
-      - loki-data:/loki
-    command:
-      - -config.file=/etc/loki/loki.yml
-
-  promtail:
-    image: grafana/promtail:latest
-    volumes:
-      - ./monitoring/promtail:/etc/promtail:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-    command:
-      - -config.file=/etc/promtail/promtail.yml
-
   uptime-kuma:
     image: louislam/uptime-kuma:latest
     volumes:
@@ -211,7 +159,4 @@ volumes:
   postgres-data:
   vendor-data:
   node-modules:
-  grafana-data:
-  prometheus-data:
-  loki-data:
   uptime-kuma-data:

@@ -17,7 +17,9 @@ class ProcessVehicleSubscriptions implements ShouldQueue
 
     public function handle(VehicleFilterMatcher $matcher): void
     {
-        $vehicle = CatalogVehicle::query()->findOrFail($this->vehicleId);
+        $vehicle = CatalogVehicle::query()
+            ->with(['make:id,name', 'model:id,name'])
+            ->findOrFail($this->vehicleId);
 
         FilterSubscription::query()
             ->where('status', FilterSubscription::STATUS_ACTIVE)
@@ -40,8 +42,8 @@ class ProcessVehicleSubscriptions implements ShouldQueue
                                     'id' => $vehicle->id,
                                     'make_id' => $vehicle->make_id,
                                     'model_id' => $vehicle->model_id,
-                                    'make' => $vehicle->make,
-                                    'model' => $vehicle->model,
+                                    'make' => $vehicle->make?->name,
+                                    'model' => $vehicle->model?->name,
                                     'price' => $vehicle->price,
                                     'mileage' => $vehicle->mileage,
                                     'power' => $vehicle->power,

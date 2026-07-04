@@ -8,16 +8,4 @@
       - Клиент:
           href: http://autoplace.127.0.0.1.sslip.io:8080
           description: Внешний сайт
-      - Grafana:
-          href: http://grafana.127.0.0.1.sslip.io:8080
-          description: Метрики и логи
-      - Prometheus:
-          href: http://prometheus.127.0.0.1.sslip.io:8080
-          description: Метрики
-      - Alertmanager:
-          href: http://alertmanager.127.0.0.1.sslip.io:8080
-          description: Алерты
-      - Uptime Kuma:
-          href: http://kuma.127.0.0.1.sslip.io:8080
-          description: Мониторинг доступности
      

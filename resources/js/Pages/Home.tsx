@@ -45,14 +45,14 @@ export default function Home() {
                     </Link>
 
                     <nav className="hidden items-center gap-6 text-sm text-zinc-500 md:flex">
-                        <Link href="/subscriptions" className="hover:text-zinc-950">Каталог</Link>
-                        <Link href="/notifications" className="hover:text-zinc-950">Уведомления</Link>
+                        <a href="#catalog" className="hover:text-zinc-950">Каталог</a>
+                        <a href="#alerts" className="hover:text-zinc-950">Уведомления</a>
                         <a href="#sell" className="text-amber-700 hover:text-amber-800">Продать авто</a>
                         <a href="#dealers" className="text-amber-700 hover:text-amber-800">Дилеры</a>
                     </nav>
 
                     <div className="flex items-center gap-2">
-                        <Button href="/subscriptions" variant="outline">Войти</Button>
+                        <Button href="#catalog" variant="outline">Войти</Button>
                         <Button href="#sell" className="hidden sm:inline-flex">Разместить авто</Button>
                     </div>
                 </div>
@@ -110,7 +110,7 @@ export default function Home() {
                                     <option>Шымкент</option>
                                 </select>
                             </Field>
-                            <Button href="/subscriptions" className="mt-1 w-full sm:col-span-2">
+                            <Button href="#catalog" className="mt-1 w-full sm:col-span-2">
                                 <Search size={16} />
                                 Показать 1 248 автомобилей
                             </Button>
@@ -158,13 +158,13 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="mx-auto max-w-6xl px-4 pb-14 sm:px-6">
+            <section id="catalog" className="mx-auto max-w-6xl px-4 pb-14 sm:px-6">
                 <div className="mb-5 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
                         <h2 className="text-3xl font-semibold tracking-normal">Свежие предложения</h2>
                         <p className="mt-2 max-w-xl text-zinc-600">Каталог строится вокруг быстрых решений: цена, год, пробег и продавец видны сразу.</p>
                     </div>
-                    <Button href="/subscriptions" variant="outline">
+                    <Button href="#catalog" variant="outline">
                         Открыть весь каталог
                         <ArrowRight size={16} />
                     </Button>
@@ -194,7 +194,7 @@ export default function Home() {
                 </div>
             </section>
 
-            <section className="border-y border-zinc-200 bg-zinc-50">
+            <section id="alerts" className="border-y border-zinc-200 bg-zinc-50">
                 <div className="mx-auto grid max-w-6xl gap-4 px-4 py-8 sm:px-6 md:grid-cols-3">
                     <Feature icon={<SlidersHorizontal size={18} />} title="Фильтры без перегруза" text="Подбор по цене, году, пробегу, мощности и типу топлива." />
                     <Feature icon={<ShieldCheck size={18} />} title="Проверка истории" text="Важные параметры автомобиля видны до перехода в сделку." />

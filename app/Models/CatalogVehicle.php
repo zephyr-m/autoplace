@@ -44,6 +44,11 @@ class CatalogVehicle extends Model
         return $this->belongsTo(Make::class);
     }
 
+    public function source(): BelongsTo
+    {
+        return $this->belongsTo(ImportSource::class);
+    }
+
     public function model(): BelongsTo
     {
         return $this->belongsTo(VehicleModel::class, 'model_id');

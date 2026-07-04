@@ -5,35 +5,35 @@ namespace App\Http\Controllers;
 use App\Actions\VehicleFilterMatcher;
 use App\Jobs\ProcessVehicleSubscriptions;
 use App\Models\CatalogVehicle;
+use App\Models\ImportSource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Inertia\Inertia;
-use Inertia\Response;
 
 class CatalogVehicleController extends Controller
 {
-    public function index(): Response
+    public function index(): JsonResponse
     {
-        return Inertia::render('AdminVehicles', [
-            'vehicles' => CatalogVehicle::query()
+        return response()->json([
+            'data' => CatalogVehicle::query()
+                ->with(['make:id,name', 'model:id,name'])
                 ->latest()
-                ->paginate(10)
-                ->through(fn (CatalogVehicle $vehicle) => [
+                ->get()
+                ->map(fn (CatalogVehicle $vehicle) => [
                     'id' => $vehicle->id,
                     'source_reference' => $vehicle->source_reference,
                     'make_id' => $vehicle->make_id,
                     'model_id' => $vehicle->model_id,
-                    'make' => $vehicle->make,
-                    'model' => $vehicle->model,
+                    'make' => $vehicle->make?->name,
+                    'model' => $vehicle->model?->name,
                     'price' => $vehicle->price,
                     'mileage' => $vehicle->mileage,
                     'power' => $vehicle->power,
                     'fuel_type' => $vehicle->fuel_type,
                     'year' => $vehicle->year,
                 ]),
-            'fuelTypes' => VehicleFilterMatcher::FUEL_TYPES,
         ]);
     }
 
@@ -43,7 +43,7 @@ class CatalogVehicleController extends Controller
 
         ProcessVehicleSubscriptions::dispatch($vehicle->id);
 
-        return to_route('admin.vehicles.index')->with('success', 'Автомобиль сохранён, проверка подписок поставлена в очередь.');
+        return to_route('home')->with('success', 'Автомобиль сохранён, проверка подписок поставлена в очередь.');
     }
 
     public function storeApi(Request $request): JsonResponse
@@ -64,11 +64,10 @@ class CatalogVehicleController extends Controller
     private function validateVehicle(Request $request): array
     {
         return $request->validate([
+            'source_id' => ['nullable', 'integer', 'exists:import_sources,id'],
             'source_reference' => ['nullable', 'string', 'max:255'],
-            'make_id' => ['required', 'integer', 'min:1'],
-            'model_id' => ['required', 'integer', 'min:1'],
-            'make' => ['required', 'string', 'max:80'],
-            'model' => ['required', 'string', 'max:80'],
+            'make_id' => ['required', 'integer', 'exists:makes,id'],
+            'model_id' => ['required', 'integer', 'exists:models,id'],
             'price' => ['required', 'integer', 'min:1'],
             'mileage' => ['required', 'integer', 'min:0'],
             'power' => ['required', 'integer', 'min:1'],
@@ -79,11 +78,24 @@ class CatalogVehicleController extends Controller
 
     private function persistVehicle(array $validated): CatalogVehicle
     {
-        $attributes = $validated + ['payload' => ['created_from' => 'back-office']];
-        $sourceReference = $validated['source_reference'] ?? null;
+        $sourceId = $validated['source_id'] ?? $this->defaultImportSource()->id;
+        $sourceReference = $validated['source_reference'] ?? 'back-office-'.Str::uuid()->toString();
+        unset($validated['source_id'], $validated['source_reference']);
 
-        return $sourceReference
-            ? CatalogVehicle::query()->updateOrCreate(['source_reference' => $sourceReference], $attributes)
-            : CatalogVehicle::query()->create($attributes);
+        $attributes = $validated + [
+            'source_id' => $sourceId,
+            'source_reference' => $sourceReference,
+            'raw_payload' => ['created_from' => 'back-office'],
+        ];
+
+        return CatalogVehicle::query()->updateOrCreate(
+            ['source_id' => $sourceId, 'source_reference' => $sourceReference],
+            $attributes,
+        );
+    }
+
+    private function defaultImportSource(): ImportSource
+    {
+        return ImportSource::query()->firstOrCreate(['name' => 'Back Office Demo']);
     }
 }
