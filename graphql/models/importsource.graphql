@@ -1,0 +1,28 @@
+type ImportSource {
+    id: ID!
+    name: String!
+    is_active: Boolean!
+    created_at: DateTime
+    updated_at: DateTime
+}
+extend type Query {
+    "Find a import_source by an identifying attribute."
+    import_source(
+        "Search by primary key or column."
+        id: ID @eq
+        name: String @eq 
+        is_active: Boolean @eq
+
+    ): ImportSource @find
+
+    "List multiple import_source."
+    import_sources(
+        name: String @where(operator: "like") 
+        is_active: Boolean @where(operator: "like")
+    ): [ImportSource!]! @paginate(defaultCount: 10)
+}
+extend type Mutation {
+    createImportSource(name: String!, is_active: Boolean!): ImportSource @create
+    updateImportSource(id: ID, name: String!, is_active: Boolean!): ImportSource @update
+    deleteImportSource(id: ID): ImportSource @delete
+}

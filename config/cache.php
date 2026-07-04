@@ -131,6 +131,13 @@ return [
     |
     */
 
-    'serializable_classes' => false,
+    'serializable_classes' => [
+        GraphQL\Language\AST\DocumentNode::class,
+        GraphQL\Language\AST\Location::class,
+        GraphQL\Language\Token::class,
+        GraphQL\Language\Source::class,
+        GraphQL\Language\AST\NameNode::class,
+        GraphQL\Language\AST\StringValueNode::class,
+    ],
 
 ];

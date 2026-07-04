@@ -1,0 +1,18 @@
+#import models/catalogvehicle.graphql
+#import models/filtersubscription.graphql
+#import models/importsource.graphql
+#import models/make.graphql
+#import models/notification.graphql
+#import models/user.graphql
+#import models/vehiclemodel.graphql
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+type Query {
+  _: Boolean @field(resolver: "App\\GraphQL\\Queries\\Dummy")
+}
+
+type Mutation {
+  _: Boolean @field(resolver: "App\\GraphQL\\Queries\\Dummy")
+}

@@ -1,0 +1,31 @@
+type Make {
+    id: ID!
+    name: String!
+    status_import: Int!
+    status_app: Int!
+    created_at: DateTime
+    updated_at: DateTime
+}
+extend type Query {
+    "Find a make by an identifying attribute."
+    make(
+        "Search by primary key or column."
+        id: ID @eq
+        name: String @eq 
+        status_import: Int @eq 
+        status_app: Int @eq
+
+    ): Make @find
+
+    "List multiple make."
+    makes(
+        name: String @where(operator: "like") 
+        status_import: Int @where(operator: "like") 
+        status_app: Int @where(operator: "like")
+    ): [Make!]! @paginate(defaultCount: 10)
+}
+extend type Mutation {
+    createMake(name: String!, status_import: Int!, status_app: Int!): Make @create
+    updateMake(id: ID, name: String!, status_import: Int!, status_app: Int!): Make @update
+    deleteMake(id: ID): Make @delete
+}

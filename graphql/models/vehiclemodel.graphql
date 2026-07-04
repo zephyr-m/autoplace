@@ -1,0 +1,31 @@
+type VehicleModel {
+    id: ID!
+    make_id: Int!
+    name: String!
+    status_app: Int!
+    created_at: DateTime
+    updated_at: DateTime
+}
+extend type Query {
+    "Find a vehicle_model by an identifying attribute."
+    vehicle_model(
+        "Search by primary key or column."
+        id: ID @eq
+        make_id: Int @eq 
+        name: String @eq 
+        status_app: Int @eq
+
+    ): VehicleModel @find
+
+    "List multiple vehicle_model."
+    vehicle_models(
+        make_id: Int @where(operator: "like") 
+        name: String @where(operator: "like") 
+        status_app: Int @where(operator: "like")
+    ): [VehicleModel!]! @paginate(defaultCount: 10)
+}
+extend type Mutation {
+    createVehicleModel(make_id: Int!, name: String!, status_app: Int!): VehicleModel @create
+    updateVehicleModel(id: ID, make_id: Int!, name: String!, status_app: Int!): VehicleModel @update
+    deleteVehicleModel(id: ID): VehicleModel @delete
+}

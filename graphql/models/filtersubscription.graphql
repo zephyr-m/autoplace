@@ -1,0 +1,32 @@
+type FilterSubscription {
+    id: ID!
+    user_identifier: String!
+    filter: String!
+    status: Int!
+    created_at: DateTime
+    updated_at: DateTime
+    notifications: [Notification] @hasMany
+}
+extend type Query {
+    "Find a filter_subscription by an identifying attribute."
+    filter_subscription(
+        "Search by primary key or column."
+        id: ID @eq
+        user_identifier: String @eq 
+        filter: String @eq 
+        status: Int @eq
+
+    ): FilterSubscription @find
+
+    "List multiple filter_subscription."
+    filter_subscriptions(
+        user_identifier: String @where(operator: "like") 
+        filter: String @where(operator: "like") 
+        status: Int @where(operator: "like")
+    ): [FilterSubscription!]! @paginate(defaultCount: 10)
+}
+extend type Mutation {
+    createFilterSubscription(user_identifier: String!, filter: String!, status: Int!): FilterSubscription @create
+    updateFilterSubscription(id: ID, user_identifier: String!, filter: String!, status: Int!): FilterSubscription @update
+    deleteFilterSubscription(id: ID): FilterSubscription @delete
+}

@@ -1,0 +1,48 @@
+type Notification {
+    id: ID!
+    subscription_id: Int!
+    vehicle_id: Int!
+    type: String!
+    channel: String
+    status: Int!
+    payload: String
+    sent_at: DateTime
+    read_at: DateTime
+    created_at: DateTime
+    updated_at: DateTime
+    subscription: FilterSubscription @belongsTo
+    vehicle: CatalogVehicle @belongsTo
+}
+extend type Query {
+    "Find a notification by an identifying attribute."
+    notification(
+        "Search by primary key or column."
+        id: ID @eq
+        subscription_id: Int @eq 
+        vehicle_id: Int @eq 
+        type: String @eq 
+        channel: String @eq 
+        status: Int @eq 
+        payload: String @eq 
+        sent_at: DateTime @eq 
+        read_at: DateTime @eq
+
+    ): Notification @find
+
+    "List multiple notification."
+    notifications(
+        subscription_id: Int @where(operator: "like") 
+        vehicle_id: Int @where(operator: "like") 
+        type: String @where(operator: "like") 
+        channel: String @where(operator: "like") 
+        status: Int @where(operator: "like") 
+        payload: String @where(operator: "like") 
+        sent_at: DateTime @where(operator: "like") 
+        read_at: DateTime @where(operator: "like")
+    ): [Notification!]! @paginate(defaultCount: 10)
+}
+extend type Mutation {
+    createNotification(subscription_id: Int!, vehicle_id: Int!, type: String!, channel: String, status: Int!, payload: String, sent_at: DateTime, read_at: DateTime): Notification @create
+    updateNotification(id: ID, subscription_id: Int!, vehicle_id: Int!, type: String!, channel: String, status: Int!, payload: String, sent_at: DateTime, read_at: DateTime): Notification @update
+    deleteNotification(id: ID): Notification @delete
+}

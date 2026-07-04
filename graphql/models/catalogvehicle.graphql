@@ -1,0 +1,54 @@
+type CatalogVehicle {
+    id: ID!
+    source_id: Int!
+    source_reference: String!
+    make_id: Int!
+    model_id: Int!
+    price: Int!
+    mileage: Int!
+    power: Int!
+    fuel_type: String!
+    year: Int!
+    raw_payload: String
+    created_at: DateTime
+    updated_at: DateTime
+    make: Make @belongsTo
+    model: VehicleModel @belongsTo
+}
+extend type Query {
+    "Find a catalog_vehicle by an identifying attribute."
+    catalog_vehicle(
+        "Search by primary key or column."
+        id: ID @eq
+        source_id: Int @eq 
+        source_reference: String @eq 
+        make_id: Int @eq 
+        model_id: Int @eq 
+        price: Int @eq 
+        mileage: Int @eq 
+        power: Int @eq 
+        fuel_type: String @eq 
+        year: Int @eq 
+        raw_payload: String @eq
+
+    ): CatalogVehicle @find
+
+    "List multiple catalog_vehicle."
+    catalog_vehicles(
+        source_id: Int @where(operator: "like") 
+        source_reference: String @where(operator: "like") 
+        make_id: Int @where(operator: "like") 
+        model_id: Int @where(operator: "like") 
+        price: Int @where(operator: "like") 
+        mileage: Int @where(operator: "like") 
+        power: Int @where(operator: "like") 
+        fuel_type: String @where(operator: "like") 
+        year: Int @where(operator: "like") 
+        raw_payload: String @where(operator: "like")
+    ): [CatalogVehicle!]! @paginate(defaultCount: 10)
+}
+extend type Mutation {
+    createCatalogVehicle(source_id: Int!, source_reference: String!, make_id: Int!, model_id: Int!, price: Int!, mileage: Int!, power: Int!, fuel_type: String!, year: Int!, raw_payload: String): CatalogVehicle @create
+    updateCatalogVehicle(id: ID, source_id: Int!, source_reference: String!, make_id: Int!, model_id: Int!, price: Int!, mileage: Int!, power: Int!, fuel_type: String!, year: Int!, raw_payload: String): CatalogVehicle @update
+    deleteCatalogVehicle(id: ID): CatalogVehicle @delete
+}
