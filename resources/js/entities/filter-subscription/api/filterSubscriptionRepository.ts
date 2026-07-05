@@ -8,6 +8,10 @@ interface CreateFilterSubscriptionData {
     createFilterSubscription: FilterSubscription;
 }
 
+interface UpdateFilterSubscriptionData {
+    updateFilterSubscription: FilterSubscription;
+}
+
 interface FilterSubscriptionsData {
     filter_subscriptions: {
         data: FilterSubscription[];
@@ -18,6 +22,10 @@ interface CreateFilterSubscriptionVariables extends Record<string, unknown> {
     userIdentifier: string;
     filter: Record<string, unknown>;
     status: number;
+}
+
+interface UpdateFilterSubscriptionVariables extends CreateFilterSubscriptionVariables {
+    id: string;
 }
 
 export async function createFilterSubscription(input: CreateFilterSubscriptionInput): Promise<FilterSubscription> {
@@ -40,6 +48,32 @@ export async function createFilterSubscription(input: CreateFilterSubscriptionIn
     );
 
     return data.createFilterSubscription;
+}
+
+export async function updateFilterSubscriptionStatus(
+    subscription: FilterSubscription,
+    status: number,
+): Promise<FilterSubscription> {
+    const data = await graphqlRequest<UpdateFilterSubscriptionData, UpdateFilterSubscriptionVariables>(
+        `
+            mutation UpdateFilterSubscription($id: ID!, $userIdentifier: String!, $filter: JSON!, $status: Int!) {
+              updateFilterSubscription(id: $id, user_identifier: $userIdentifier, filter: $filter, status: $status) {
+                id
+                user_identifier
+                filter
+                status
+              }
+            }
+        `,
+        {
+            id: subscription.id,
+            userIdentifier: subscription.user_identifier,
+            filter: subscription.filter,
+            status,
+        },
+    );
+
+    return data.updateFilterSubscription;
 }
 
 export async function getFilterSubscriptions(userIdentifier = 'demo-user@example.com'): Promise<FilterSubscription[]> {

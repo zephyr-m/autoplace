@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { getFilterSubscriptions } from '../api/filterSubscriptionRepository';
+import { getFilterSubscriptions, updateFilterSubscriptionStatus } from '../api/filterSubscriptionRepository';
 import type { FilterSubscription } from './types';
 
 export function useFilterSubscriptions(userIdentifier = 'demo-user@example.com') {
@@ -25,5 +25,13 @@ export function useFilterSubscriptions(userIdentifier = 'demo-user@example.com')
         void reload();
     }, [reload]);
 
-    return { subscriptions, isLoading, error, reload };
+    const updateStatus = useCallback(async (subscription: FilterSubscription, status: number) => {
+        const updated = await updateFilterSubscriptionStatus(subscription, status);
+
+        setSubscriptions(prev => prev.map(item => item.id === updated.id ? updated : item));
+
+        return updated;
+    }, []);
+
+    return { subscriptions, isLoading, error, reload, updateStatus };
 }

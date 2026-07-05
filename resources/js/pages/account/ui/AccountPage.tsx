@@ -64,6 +64,7 @@ export default function Account() {
         isLoading: isLoadingSubscriptions,
         error: subscriptionsError,
         reload: reloadSubscriptions,
+        updateStatus: updateSubscriptionStatus,
     } = useFilterSubscriptions();
     const {
         notifications: accountNotifications,
@@ -92,6 +93,7 @@ export default function Account() {
 
     // Subscriptions tab segment filter: all / active / paused
     const [subFilter, setSubFilter] = useState<'all' | 'active' | 'paused'>('all');
+    const [updatingSubscriptionIds, setUpdatingSubscriptionIds] = useState<Set<string>>(() => new Set());
 
     const [readNotificationIds, setReadNotificationIds] = useState<Set<string>>(() => new Set());
 
@@ -180,6 +182,34 @@ export default function Account() {
     const removeFavorite = (id: number) => {
         setFavorites(favorites.filter(f => f.id !== id));
         showToast('Удалено из избранного');
+    };
+
+    const toggleSubscriptionStatus = async (id: string) => {
+        const subscription = subscriptions.find(item => item.id === id);
+
+        if (!subscription || updatingSubscriptionIds.has(id)) {
+            return;
+        }
+
+        const nextStatus = subscription.status === FILTER_SUBSCRIPTION_STATUS.active
+            ? FILTER_SUBSCRIPTION_STATUS.paused
+            : FILTER_SUBSCRIPTION_STATUS.active;
+
+        setUpdatingSubscriptionIds(prev => new Set(prev).add(id));
+
+        try {
+            await updateSubscriptionStatus(subscription, nextStatus);
+            showToast(nextStatus === FILTER_SUBSCRIPTION_STATUS.active ? 'Подписка возобновлена' : 'Подписка остановлена');
+        } catch (caught) {
+            showToast(caught instanceof Error ? caught.message : 'Не удалось изменить подписку');
+        } finally {
+            setUpdatingSubscriptionIds(prev => {
+                const next = new Set(prev);
+                next.delete(id);
+
+                return next;
+            });
+        }
     };
 
     // Filter Subscriptions computed list
@@ -566,6 +596,17 @@ export default function Account() {
                                         </div>
 
                                         <div className="flex items-center gap-2 pt-1">
+                                            <Button
+                                                onClick={() => void toggleSubscriptionStatus(sub.id)}
+                                                variant={sub.status === FILTER_SUBSCRIPTION_STATUS.active ? 'outline' : 'default'}
+                                                size="sm"
+                                                disabled={updatingSubscriptionIds.has(sub.id)}
+                                                className="h-8 font-semibold"
+                                            >
+                                                {updatingSubscriptionIds.has(sub.id)
+                                                    ? 'Сохраняем...'
+                                                    : sub.status === FILTER_SUBSCRIPTION_STATUS.active ? 'Остановить' : 'Возобновить'}
+                                            </Button>
                                             <Button href="/catalog" variant="outline" size="sm" className="h-8 font-semibold text-zinc-700 bg-white">
                                                 Открыть каталог
                                             </Button>

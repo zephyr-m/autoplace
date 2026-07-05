@@ -11,6 +11,7 @@ use App\Models\Notification;
 use App\Models\VehicleModel;
 use App\Support\DemoVehicleGeneration;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
@@ -60,6 +61,41 @@ class SubscriptionNotificationTest extends TestCase
 
         $this->assertSame(1, Notification::query()->count());
         $this->assertDatabaseHas('notifications', [
+            'subscription_id' => $subscription->id,
+            'vehicle_id' => $vehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
+    }
+
+    public function test_notification_uniqueness_is_enforced_by_database(): void
+    {
+        [$source, $make, $model] = $this->catalogReferences('Demo Import', 'Toyota', 'Camry');
+        $subscription = FilterSubscription::query()->create([
+            'user_identifier' => 'demo-user@example.com',
+            'filter' => ['make_id' => $make->id],
+            'status' => FilterSubscription::STATUS_ACTIVE,
+        ]);
+        $vehicle = CatalogVehicle::query()->create([
+            'source_id' => $source->id,
+            'source_reference' => 'unique-notification-camry',
+            'make_id' => $make->id,
+            'model_id' => $model->id,
+            'price' => 26000,
+            'mileage' => 42000,
+            'power' => 203,
+            'fuel_type' => 'gasoline',
+            'year' => 2021,
+        ]);
+
+        Notification::query()->create([
+            'subscription_id' => $subscription->id,
+            'vehicle_id' => $vehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
+
+        $this->expectException(QueryException::class);
+
+        Notification::query()->create([
             'subscription_id' => $subscription->id,
             'vehicle_id' => $vehicle->id,
             'type' => Notification::TYPE_VEHICLE_MATCH,
@@ -289,6 +325,72 @@ class SubscriptionNotificationTest extends TestCase
             ->assertJsonPath('errors.0.message', 'Нельзя создать подписку без параметров фильтра.');
 
         $this->assertDatabaseCount('filter_subscriptions', 0);
+    }
+
+    public function test_create_filter_subscription_validates_filter_values(): void
+    {
+        [, $make, $model] = $this->catalogReferences('Demo Import', 'Toyota', 'Camry');
+
+        $this->postJson('/graphql', [
+            'query' => <<<'GRAPHQL'
+                mutation ($filter: JSON!) {
+                  createFilterSubscription(user_identifier: "demo-user@example.com", filter: $filter, status: 1) {
+                    id
+                  }
+                }
+                GRAPHQL,
+            'variables' => [
+                'filter' => [
+                    'make_id' => $make->id,
+                    'model_id' => $model->id,
+                    'max_price' => 'cheap',
+                    'fuel_type' => 'steam',
+                    'year_from' => 2025,
+                    'year_to' => 2020,
+                ],
+            ],
+        ])
+            ->assertOk()
+            ->assertJsonPath('errors.0.extensions.validation.max_price.0', 'validation.integer')
+            ->assertJsonPath('errors.0.extensions.validation.fuel_type.0', 'validation.in')
+            ->assertJsonPath('errors.0.extensions.validation.year_to.0', 'validation.gte.numeric');
+
+        $this->assertDatabaseCount('filter_subscriptions', 0);
+    }
+
+    public function test_create_filter_subscription_accepts_valid_typed_filter(): void
+    {
+        [, $make, $model] = $this->catalogReferences('Demo Import', 'Toyota', 'Camry');
+
+        $this->postJson('/graphql', [
+            'query' => <<<'GRAPHQL'
+                mutation ($filter: JSON!) {
+                  createFilterSubscription(user_identifier: "demo-user@example.com", filter: $filter, status: 1) {
+                    filter
+                  }
+                }
+                GRAPHQL,
+            'variables' => [
+                'filter' => [
+                    'make_id' => $make->id,
+                    'model_id' => $model->id,
+                    'min_price' => 20000,
+                    'max_price' => 30000,
+                    'min_mileage' => 0,
+                    'max_mileage' => 80000,
+                    'min_power' => 150,
+                    'max_power' => 250,
+                    'fuel_type' => 'gasoline',
+                    'year_from' => 2020,
+                    'year_to' => 2024,
+                ],
+            ],
+        ])
+            ->assertOk()
+            ->assertJsonMissingPath('errors')
+            ->assertJsonPath('data.createFilterSubscription.filter.max_power', 250);
+
+        $this->assertDatabaseCount('filter_subscriptions', 1);
     }
 
     public function test_created_tesla_subscription_filter_is_used_for_matching(): void

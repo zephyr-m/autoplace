@@ -32,7 +32,7 @@ class ProcessVehicleSubscriptions implements ShouldQueue
                         continue;
                     }
 
-                    Notification::query()->firstOrCreate(
+                    Notification::query()->createOrFirst(
                         [
                             'subscription_id' => $subscription->id,
                             'vehicle_id' => $vehicle->id,
