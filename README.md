@@ -30,7 +30,12 @@ php artisan test
 
 ## Гайд
 
-[Стартовая страница](http://homepage.127.0.0.1.sslip.io:8080/)
+- [Стартовая страница](http://homepage.127.0.0.1.sslip.io:8080/)
+- [Dozzle](http://dozzle.127.0.0.1.sslip.io:8080/)
+- [Админ панель](http://admin.autoplace.127.0.0.1.sslip.io:8080/admin)
+- [Клиентская часть](http://autoplace.127.0.0.1.sslip.io:8080/)
+- [Статика](http://static.autoplace.127.0.0.1.sslip.io:8080/)
+
 
 #### Админка:
 - Логин: `admin@example.com`

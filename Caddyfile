@@ -14,3 +14,8 @@ http://homepage.127.0.0.1.sslip.io {
 http://dozzle.127.0.0.1.sslip.io {
     reverse_proxy dozzle:8080
 }
+
+http://static.autoplace.127.0.0.1.sslip.io {
+    root * /srv/autoplace-static
+    file_server
+}
