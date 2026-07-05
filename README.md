@@ -1,6 +1,8 @@
 # AutoPlace
 
-Проект про подписки на фильтры каталога авто.
+- Проект был выполнен в рамках тестового задания на позицию Senoir Php Developer.
+- В проекте реализован 2 пункт из [технического задания](docs/take_home_assignments.md)
+
 
 Пользователь выбирает фильтр на сайте, создаёт подписку, а когда во внутреннем каталоге появляется подходящая машина, система создаёт уведомление.
 
@@ -20,33 +22,36 @@
 docker compose up --build
 ```
 
-Тесты: `docker compose exec app php artisan test`
+## Тесты
 
-Сайт: `http://autoplace.127.0.0.1.sslip.io:8080`
+```bash
+php artisan test
+```
 
-Админка:
-`http://admin.autoplace.127.0.0.1.sslip.io:8080/admin`
-Логин: `admin@example.com`
-Пароль: `password`
+## Гайд
 
-Homepage с быстрыми ссылками: `http://homepage.127.0.0.1.sslip.io:8080`
+[Стартовая страница](http://autoplace.127.0.0.1.sslip.io:8080)
 
-Dozzle с логами контейнеров: `http://dozzle.127.0.0.1.sslip.io:8080`
+#### Админка:
+- Логин: `admin@example.com`
+- Пароль: `password`
 
-База для DBeaver:
-Host: `127.0.0.1`
-Port: `5433`
-Database: `cars`
-User: `cars`
-Password: `secret`
+#### База:
+- Host: `127.0.0.1`
+- Port: `5433`
+- Database: `cars`
+- User: `cars`
+- Password: `secret`
 
 Создать демо-машины:
 
 ```bash
-docker compose exec app php artisan demo:add-catalog-vehicle --count=25
+php artisan demo:add-catalog-vehicle --count=25
 ```
 
-То же самое можно сделать в админке кнопкой `Сгенерировать`.
+или `Админка -> Автомобили -> Сгенерировать`.
+
+
 
 ## Стек
 
