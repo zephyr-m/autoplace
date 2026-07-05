@@ -1,5 +1,4 @@
 import { Link } from '@inertiajs/react';
-import { CarFront } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import Button from '@/shared/ui/Button';
@@ -22,10 +21,7 @@ export default function AppHeader({ navItems = [], actions }: AppHeaderProps) {
         <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/90 backdrop-blur">
             <div className="mx-auto flex min-h-18 max-w-6xl items-center justify-between gap-6 px-4 sm:px-6">
                 <Link href="/" className="flex items-center gap-3 font-semibold">
-                    <span className="flex size-10 min-w-10 items-center justify-center rounded-md bg-zinc-950 text-white">
-                        <CarFront size={21} />
-                    </span>
-                    <span className="text-lg">AutoPlace</span>
+                    <img src="/assets/autoplace-logo.png" alt="AutoPlace" className="h-10 w-auto max-w-[150px] object-contain" />
                 </Link>
 
                 {navItems.length > 0 && (

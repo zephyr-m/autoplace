@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { ArrowRight, BadgeCheck, Bell, CarFront, Gauge, Search, ShieldCheck, SlidersHorizontal } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Bell, Gauge, Search, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import Badge from '@/shared/ui/Badge';
@@ -42,10 +42,7 @@ export default function Home() {
             <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/90 backdrop-blur">
                 <div className="mx-auto flex min-h-18 max-w-6xl items-center justify-between gap-6 px-4 sm:px-6">
                     <Link href="/" className="flex items-center gap-3 font-semibold">
-                        <span className="flex size-10 items-center justify-center rounded-md bg-zinc-950 text-white">
-                            <CarFront size={21} />
-                        </span>
-                        <span className="text-lg">AutoPlace</span>
+                        <img src="/assets/autoplace-logo.png" alt="AutoPlace" className="h-10 w-auto max-w-[150px] object-contain" />
                     </Link>
 
                     <nav className="hidden items-center gap-6 text-sm text-zinc-500 md:flex">

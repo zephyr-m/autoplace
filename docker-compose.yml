@@ -23,7 +23,7 @@ services:
       timeout: 5s
       retries: 3
     environment:
-      APP_NAME: "Car Match"
+      APP_NAME: "AutoPlace"
       APP_ENV: local
       APP_DEBUG: "true"
       APP_URL: http://autoplace.127.0.0.1.sslip.io:8080
@@ -69,7 +69,7 @@ services:
   queue:
     build: .
     environment:
-      APP_NAME: "Car Match"
+      APP_NAME: "AutoPlace"
       APP_ENV: local
       APP_DEBUG: "true"
       APP_URL: http://autoplace.127.0.0.1.sslip.io:8080
@@ -97,7 +97,7 @@ services:
   scheduler:
     build: .
     environment:
-      APP_NAME: "Car Match"
+      APP_NAME: "AutoPlace"
       APP_ENV: local
       APP_DEBUG: "true"
       APP_URL: http://autoplace.127.0.0.1.sslip.io:8080
