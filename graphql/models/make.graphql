@@ -10,11 +10,7 @@ extend type Query {
     "Find a make by an identifying attribute."
     make(
         "Search by primary key or column."
-        id: ID @eq
-        name: String @eq 
-        status_import: Int @eq 
-        status_app: Int @eq
-
+        id: ID! @eq
     ): Make @find
 
     "List multiple make."

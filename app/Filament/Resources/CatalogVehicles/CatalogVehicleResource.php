@@ -13,7 +13,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use UnitEnum;
 
 class CatalogVehicleResource extends Resource
 {
@@ -21,7 +20,7 @@ class CatalogVehicleResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTruck;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Внутренняя система';
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $modelLabel = 'автомобиль';
 

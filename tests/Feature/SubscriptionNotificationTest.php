@@ -9,12 +9,23 @@ use App\Models\ImportSource;
 use App\Models\Make;
 use App\Models\Notification;
 use App\Models\VehicleModel;
+use App\Support\DemoVehicleGeneration;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class SubscriptionNotificationTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Config::set('services.vehicle_matching.force_match', false);
+        DemoVehicleGeneration::enable();
+    }
 
     public function test_matching_vehicle_creates_notification_once(): void
     {
@@ -86,9 +97,49 @@ class SubscriptionNotificationTest extends TestCase
         $this->assertSame(0, Notification::query()->count());
     }
 
+    public function test_force_match_flag_creates_notification_for_non_matching_vehicle(): void
+    {
+        Config::set('services.vehicle_matching.force_match', true);
+
+        [, $toyota] = $this->catalogReferences('Demo Import', 'Toyota', 'Camry');
+        [$source, $tesla, $model] = $this->catalogReferences('Demo Import', 'Tesla', 'Model 3');
+
+        $subscription = FilterSubscription::query()->create([
+            'user_identifier' => 'demo-user@example.com',
+            'filter' => [
+                'make_id' => $toyota->id,
+                'max_price' => 30000,
+            ],
+            'status' => FilterSubscription::STATUS_ACTIVE,
+        ]);
+
+        $vehicle = CatalogVehicle::query()->create([
+            'source_id' => $source->id,
+            'source_reference' => 'force-match-model-3',
+            'make_id' => $tesla->id,
+            'model_id' => $model->id,
+            'price' => 39000,
+            'mileage' => 18000,
+            'power' => 283,
+            'fuel_type' => 'electric',
+            'year' => 2022,
+        ]);
+
+        ProcessVehicleSubscriptions::dispatchSync($vehicle->id);
+
+        $this->assertDatabaseHas('notifications', [
+            'subscription_id' => $subscription->id,
+            'vehicle_id' => $vehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
+    }
+
     public function test_http_vehicle_event_is_validated_and_queued_for_matching(): void
     {
+        Queue::fake();
+
         [, $make, $model] = $this->catalogReferences('Demo Import', 'Toyota', 'Camry');
+        $csrfToken = 'test-csrf-token';
 
         FilterSubscription::query()->create([
             'user_identifier' => 'demo-user@example.com',
@@ -96,7 +147,8 @@ class SubscriptionNotificationTest extends TestCase
             'status' => FilterSubscription::STATUS_ACTIVE,
         ]);
 
-        $this->post('/admin/vehicles', [
+        $this->withSession(['_token' => $csrfToken])->post('/admin/vehicles', [
+            '_token' => $csrfToken,
             'source_reference' => 'http-camry',
             'make_id' => $make->id,
             'model_id' => $model->id,
@@ -108,7 +160,194 @@ class SubscriptionNotificationTest extends TestCase
         ])->assertRedirect('/');
 
         $this->assertDatabaseHas('catalog_vehicles', ['source_reference' => 'http-camry']);
-        $this->assertSame(1, Notification::query()->count());
+        Queue::assertPushed(ProcessVehicleSubscriptions::class);
+    }
+
+    public function test_demo_catalog_vehicle_command_queues_subscription_matching(): void
+    {
+        Queue::fake();
+
+        $this->artisan('demo:add-catalog-vehicle', ['--count' => 1])
+            ->assertSuccessful();
+
+        $this->assertDatabaseCount('catalog_vehicles', 1);
+        Queue::assertPushed(ProcessVehicleSubscriptions::class, 1);
+    }
+
+    public function test_disabled_demo_generation_does_not_create_vehicle_or_queue_matching(): void
+    {
+        Queue::fake();
+        DemoVehicleGeneration::disable();
+
+        $this->artisan('demo:add-catalog-vehicle', ['--count' => 1])
+            ->assertSuccessful();
+
+        $this->assertDatabaseCount('catalog_vehicles', 0);
+        Queue::assertNotPushed(ProcessVehicleSubscriptions::class);
+    }
+
+    public function test_user_notifications_query_returns_user_notifications_newest_first(): void
+    {
+        [$source, $make, $model] = $this->catalogReferences('Demo Import', 'Toyota', 'Camry');
+        $ownSubscription = FilterSubscription::query()->create([
+            'user_identifier' => 'demo-user@example.com',
+            'filter' => ['make_id' => $make->id],
+            'status' => FilterSubscription::STATUS_ACTIVE,
+        ]);
+        $otherSubscription = FilterSubscription::query()->create([
+            'user_identifier' => 'other-user@example.com',
+            'filter' => ['make_id' => $make->id],
+            'status' => FilterSubscription::STATUS_ACTIVE,
+        ]);
+        $olderVehicle = CatalogVehicle::query()->create([
+            'source_id' => $source->id,
+            'source_reference' => 'graphql-notification-camry-older',
+            'make_id' => $make->id,
+            'model_id' => $model->id,
+            'price' => 26000,
+            'mileage' => 42000,
+            'power' => 203,
+            'fuel_type' => 'gasoline',
+            'year' => 2021,
+        ]);
+        $newerVehicle = CatalogVehicle::query()->create([
+            'source_id' => $source->id,
+            'source_reference' => 'graphql-notification-camry-newer',
+            'make_id' => $make->id,
+            'model_id' => $model->id,
+            'price' => 26000,
+            'mileage' => 42000,
+            'power' => 203,
+            'fuel_type' => 'gasoline',
+            'year' => 2021,
+        ]);
+
+        $older = Notification::query()->create([
+            'subscription_id' => $ownSubscription->id,
+            'vehicle_id' => $olderVehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
+        $newer = Notification::query()->create([
+            'subscription_id' => $ownSubscription->id,
+            'vehicle_id' => $newerVehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
+        $older->forceFill([
+            'created_at' => now()->subMinute(),
+            'updated_at' => now()->subMinute(),
+        ])->save();
+        $newer->forceFill([
+            'created_at' => now(),
+            'updated_at' => now(),
+        ])->save();
+        Notification::query()->create([
+            'subscription_id' => $otherSubscription->id,
+            'vehicle_id' => $olderVehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
+
+        $this->postJson('/graphql', [
+            'query' => <<<'GRAPHQL'
+                query ($userIdentifier: String!) {
+                  user_notifications(user_identifier: $userIdentifier) {
+                    id
+                    subscription {
+                      user_identifier
+                    }
+                    vehicle {
+                      make {
+                        name
+                      }
+                    }
+                  }
+                }
+                GRAPHQL,
+            'variables' => ['userIdentifier' => 'demo-user@example.com'],
+        ])
+            ->assertOk()
+            ->assertJsonMissingPath('errors')
+            ->assertJsonCount(2, 'data.user_notifications')
+            ->assertJsonPath('data.user_notifications.0.id', (string) $newer->id)
+            ->assertJsonPath('data.user_notifications.1.id', (string) $older->id)
+            ->assertJsonPath('data.user_notifications.0.subscription.user_identifier', 'demo-user@example.com')
+            ->assertJsonPath('data.user_notifications.0.vehicle.make.name', 'Toyota');
+    }
+
+    public function test_create_filter_subscription_rejects_empty_filter(): void
+    {
+        $this->postJson('/graphql', [
+            'query' => <<<'GRAPHQL'
+                mutation ($filter: JSON!) {
+                  createFilterSubscription(user_identifier: "demo-user@example.com", filter: $filter, status: 1) {
+                    id
+                  }
+                }
+                GRAPHQL,
+            'variables' => ['filter' => []],
+        ])
+            ->assertOk()
+            ->assertJsonPath('errors.0.message', 'Нельзя создать подписку без параметров фильтра.');
+
+        $this->assertDatabaseCount('filter_subscriptions', 0);
+    }
+
+    public function test_created_tesla_subscription_filter_is_used_for_matching(): void
+    {
+        [$source, $tesla, $teslaModel] = $this->catalogReferences('Demo Import', 'Tesla', 'Model 3');
+        [, $bmw, $bmwModel] = $this->catalogReferences('Demo Import', 'BMW', 'X5');
+
+        $this->postJson('/graphql', [
+            'query' => <<<'GRAPHQL'
+                mutation ($filter: JSON!) {
+                  createFilterSubscription(user_identifier: "demo-user@example.com", filter: $filter, status: 1) {
+                    id
+                    filter
+                  }
+                }
+                GRAPHQL,
+            'variables' => ['filter' => ['make_ids' => [$tesla->id]]],
+        ])
+            ->assertOk()
+            ->assertJsonMissingPath('errors')
+            ->assertJsonPath('data.createFilterSubscription.filter.make_ids.0', $tesla->id);
+
+        $subscription = FilterSubscription::query()->firstOrFail();
+        $teslaVehicle = CatalogVehicle::query()->create([
+            'source_id' => $source->id,
+            'source_reference' => 'tesla-subscription-match',
+            'make_id' => $tesla->id,
+            'model_id' => $teslaModel->id,
+            'price' => 39000,
+            'mileage' => 18000,
+            'power' => 283,
+            'fuel_type' => 'electric',
+            'year' => 2022,
+        ]);
+        $bmwVehicle = CatalogVehicle::query()->create([
+            'source_id' => $source->id,
+            'source_reference' => 'tesla-subscription-miss',
+            'make_id' => $bmw->id,
+            'model_id' => $bmwModel->id,
+            'price' => 39000,
+            'mileage' => 18000,
+            'power' => 283,
+            'fuel_type' => 'gasoline',
+            'year' => 2022,
+        ]);
+
+        ProcessVehicleSubscriptions::dispatchSync($teslaVehicle->id);
+        ProcessVehicleSubscriptions::dispatchSync($bmwVehicle->id);
+
+        $this->assertDatabaseHas('notifications', [
+            'subscription_id' => $subscription->id,
+            'vehicle_id' => $teslaVehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
+        $this->assertDatabaseMissing('notifications', [
+            'subscription_id' => $subscription->id,
+            'vehicle_id' => $bmwVehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
     }
 
     /**

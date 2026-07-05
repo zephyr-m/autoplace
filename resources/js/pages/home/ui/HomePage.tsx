@@ -2,6 +2,10 @@ import { Link } from '@inertiajs/react';
 import { ArrowRight, BadgeCheck, Bell, CarFront, Gauge, Search, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 import type { ReactNode } from 'react';
 
+import Badge from '@/shared/ui/Badge';
+import Button from '@/shared/ui/Button';
+import Card from '@/shared/ui/Card';
+
 const vehicles = [
     {
         title: 'Toyota Camry',
@@ -45,14 +49,14 @@ export default function Home() {
                     </Link>
 
                     <nav className="hidden items-center gap-6 text-sm text-zinc-500 md:flex">
-                        <a href="#catalog" className="hover:text-zinc-950">Каталог</a>
+                        <Link href="/catalog" className="hover:text-zinc-950">Каталог</Link>
                         <a href="#alerts" className="hover:text-zinc-950">Уведомления</a>
                         <a href="#sell" className="text-amber-700 hover:text-amber-800">Продать авто</a>
                         <a href="#dealers" className="text-amber-700 hover:text-amber-800">Дилеры</a>
                     </nav>
 
                     <div className="flex items-center gap-2">
-                        <Button href="#catalog" variant="outline">Войти</Button>
+                        <Button href="/account" variant="outline">Войти</Button>
                         <Button href="#sell" className="hidden sm:inline-flex">Разместить авто</Button>
                     </div>
                 </div>
@@ -110,7 +114,7 @@ export default function Home() {
                                     <option>Шымкент</option>
                                 </select>
                             </Field>
-                            <Button href="#catalog" className="mt-1 w-full sm:col-span-2">
+                            <Button href="/catalog" className="mt-1 w-full sm:col-span-2">
                                 <Search size={16} />
                                 Показать 1 248 автомобилей
                             </Button>
@@ -164,7 +168,7 @@ export default function Home() {
                         <h2 className="text-3xl font-semibold tracking-normal">Свежие предложения</h2>
                         <p className="mt-2 max-w-xl text-zinc-600">Каталог строится вокруг быстрых решений: цена, год, пробег и продавец видны сразу.</p>
                     </div>
-                    <Button href="#catalog" variant="outline">
+                    <Button href="/catalog" variant="outline">
                         Открыть весь каталог
                         <ArrowRight size={16} />
                     </Button>
@@ -210,31 +214,7 @@ export default function Home() {
     );
 }
 
-function Button({ href, variant = 'default', size = 'default', className = '', children }: { href: string; variant?: 'default' | 'outline'; size?: 'default' | 'sm'; className?: string; children: ReactNode }) {
-    const base = 'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50';
-    const variants = {
-        default: 'bg-zinc-950 text-white hover:bg-zinc-800',
-        outline: 'border border-zinc-200 bg-white text-zinc-950 hover:bg-zinc-100',
-    };
-    const sizes = {
-        default: 'h-10 px-4',
-        sm: 'h-8 px-3',
-    };
 
-    if (href.startsWith('/')) {
-        return <Link href={href} className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}>{children}</Link>;
-    }
-
-    return <a href={href} className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}>{children}</a>;
-}
-
-function Card({ className = '', children }: { className?: string; children: ReactNode }) {
-    return <div className={`rounded-md border border-zinc-200 bg-white ${className}`}>{children}</div>;
-}
-
-function Badge({ children }: { children: ReactNode }) {
-    return <div className="inline-flex h-7 items-center gap-2 rounded-full border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-500">{children}</div>;
-}
 
 function Tab({ active = false, children }: { active?: boolean; children: ReactNode }) {
     return <button type="button" className={`rounded-md px-3 py-2 text-sm font-medium ${active ? 'bg-zinc-100 text-zinc-950' : 'text-zinc-500 hover:text-zinc-950'}`}>{children}</button>;

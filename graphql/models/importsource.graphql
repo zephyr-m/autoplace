@@ -9,10 +9,7 @@ extend type Query {
     "Find a import_source by an identifying attribute."
     import_source(
         "Search by primary key or column."
-        id: ID @eq
-        name: String @eq 
-        is_active: Boolean @eq
-
+        id: ID! @eq
     ): ImportSource @find
 
     "List multiple import_source."

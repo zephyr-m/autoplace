@@ -16,6 +16,9 @@ class NotificationsTable
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
                 TextColumn::make('subscription.user_identifier')
                     ->label('Пользователь')
                     ->searchable(),
@@ -61,6 +64,7 @@ class NotificationsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('id', 'desc');
     }
 }

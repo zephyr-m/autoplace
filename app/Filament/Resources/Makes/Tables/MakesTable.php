@@ -15,18 +15,23 @@ class MakesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Название')
                     ->searchable(),
                 TextColumn::make('status_import')
+                    ->label('Статус импорта')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('status_app')
+                    ->label('Статус приложения')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->label('Создано')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('Обновлено')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

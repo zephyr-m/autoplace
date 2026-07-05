@@ -65,4 +65,24 @@ class VehicleFilterMatcherTest extends TestCase
             'year_to' => 2021,
         ]));
     }
+
+    public function test_matches_multi_value_subscription_filters(): void
+    {
+        $vehicle = new CatalogVehicle([
+            'make_id' => 2,
+            'model_id' => 20,
+            'price' => 39000,
+            'mileage' => 18000,
+            'power' => 283,
+            'fuel_type' => 'electric',
+            'year' => 2022,
+        ]);
+
+        $this->assertTrue((new VehicleFilterMatcher)->matches($vehicle, [
+            'make_ids' => [1, 2],
+            'model_ids' => [20, 21],
+            'fuel_types' => ['gasoline', 'electric'],
+            'max_price' => 40000,
+        ]));
+    }
 }

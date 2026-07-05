@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'vehicle_matching' => [
+        'force_match' => filter_var(env('VEHICLE_MATCHING_FORCE_MATCH', false), FILTER_VALIDATE_BOOLEAN),
+    ],
+
 ];

@@ -19,7 +19,11 @@ class CatalogVehiclesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->poll('10s')
             ->columns([
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
                 TextColumn::make('source_reference')
                     ->label('Внешний ID')
                     ->searchable(),
@@ -109,6 +113,7 @@ class CatalogVehiclesTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('id', 'desc');
     }
 }

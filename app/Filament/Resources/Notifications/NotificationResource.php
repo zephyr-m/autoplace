@@ -13,7 +13,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use UnitEnum;
 
 class NotificationResource extends Resource
 {
@@ -21,7 +20,7 @@ class NotificationResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBell;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Внешняя система';
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $modelLabel = 'уведомление';
 

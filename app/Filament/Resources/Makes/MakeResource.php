@@ -20,6 +20,12 @@ class MakeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?int $navigationSort = 4;
+
+    protected static ?string $modelLabel = 'марка';
+
+    protected static ?string $pluralModelLabel = 'Марки';
+
     public static function form(Schema $schema): Schema
     {
         return MakeForm::configure($schema);

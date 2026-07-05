@@ -25,8 +25,10 @@ class ProcessVehicleSubscriptions implements ShouldQueue
             ->where('status', FilterSubscription::STATUS_ACTIVE)
             ->orderBy('id')
             ->chunkById(100, function ($subscriptions) use ($matcher, $vehicle): void {
+                $forceMatch = (bool) config('services.vehicle_matching.force_match');
+
                 foreach ($subscriptions as $subscription) {
-                    if (! $matcher->matches($vehicle, $subscription->filter ?? [])) {
+                    if (! $forceMatch && ! $matcher->matches($vehicle, $subscription->filter ?? [])) {
                         continue;
                     }
 

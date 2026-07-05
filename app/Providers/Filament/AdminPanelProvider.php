@@ -7,15 +7,18 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
+use Illuminate\Support\HtmlString;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
@@ -37,11 +40,21 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+            ->navigationGroups([
+                NavigationGroup::make('Внутренняя система'),
+                NavigationGroup::make('Внешняя система'),
+                NavigationGroup::make('Справочники'),
+                NavigationGroup::make('Инструменты'),
+            ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AdminStatsOverview::class,
                 AccountWidget::class,
             ])
+            ->renderHook(
+                PanelsRenderHook::SCRIPTS_AFTER,
+                fn (): HtmlString => new HtmlString(view('filament.hooks.admin-event-sounds')->render()),
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -60,7 +73,7 @@ class AdminPanelProvider extends PanelProvider
                 NavigationItem::make('GraphiQL')
                     ->url('/graphiql', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-fire')
-                    ->group('Tools')
+                    ->group('Инструменты')
                     ->sort(3),
             ]);
     }

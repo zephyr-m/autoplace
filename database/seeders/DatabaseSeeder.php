@@ -4,10 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\CatalogVehicle;
 use App\Models\FilterSubscription;
+use App\Models\ImportSource;
+use App\Models\Make;
 use App\Models\User;
+use App\Models\VehicleModel;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,61 +25,74 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
-        $sourceId = DB::table('import_sources')->insertGetId([
+        $source = ImportSource::query()->firstOrCreate([
             'name' => 'Demo Import',
+        ], [
             'is_active' => true,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
-        $makeId = DB::table('makes')->insertGetId([
-            'name' => 'Toyota',
-            'status_import' => 1,
-            'status_app' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        $modelId = DB::table('models')->insertGetId([
-            'make_id' => $makeId,
-            'name' => 'Camry',
-            'status_app' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $models = $this->seedCatalogReferences();
+        $camry = $models['Toyota']['Camry'];
+        $toyota = $camry->make;
 
         $subscription = FilterSubscription::query()->firstOrCreate(
             ['user_identifier' => 'demo-user@example.com'],
             [
                 'filter' => [
-                    'make_id' => $makeId,
-                    'model_id' => $modelId,
+                    'make_id' => $toyota->id,
+                    'model_id' => $camry->id,
                     'max_price' => 3000000,
                     'fuel_type' => 'gasoline',
                     'year_from' => 2020,
                 ],
+                'status' => FilterSubscription::STATUS_ACTIVE,
             ],
         );
 
-        $vehicle = CatalogVehicle::query()->updateOrCreate(
-            [
-                'source_id' => $sourceId,
-                'source_reference' => 'seed-toyota-camry',
-            ],
-            [
-                'source_id' => $sourceId,
-                'source_reference' => 'seed-toyota-camry',
-                'make_id' => $makeId,
-                'model_id' => $modelId,
-                'price' => 2600000,
-                'mileage' => 42000,
-                'power' => 203,
-                'fuel_type' => 'gasoline',
-                'year' => 2021,
-                'raw_payload' => ['source' => 'seed'],
-            ],
-        );
+        $this->call(CatalogVehicleSeeder::class);
 
         $subscription->refresh();
+    }
+
+    /**
+     * @return array<string, array<string, VehicleModel>>
+     */
+    private function seedCatalogReferences(): array
+    {
+        $references = [];
+
+        foreach ($this->catalogReferences() as $makeName => $modelNames) {
+            $make = Make::query()->firstOrCreate([
+                'name' => $makeName,
+            ], [
+                'status_import' => 1,
+                'status_app' => 1,
+            ]);
+
+            foreach ($modelNames as $modelName) {
+                $references[$makeName][$modelName] = VehicleModel::query()->firstOrCreate([
+                    'make_id' => $make->id,
+                    'name' => $modelName,
+                ], [
+                    'status_app' => 1,
+                ])->load('make');
+            }
+        }
+
+        return $references;
+    }
+
+    /**
+     * @return array<string, array<int, string>>
+     */
+    private function catalogReferences(): array
+    {
+        return [
+            'Toyota' => ['Camry', 'RAV4', 'Corolla'],
+            'BMW' => ['320d', 'X5', 'X3'],
+            'Tesla' => ['Model 3', 'Model Y', 'Model S'],
+            'Hyundai' => ['Tucson', 'Elantra', 'Santa Fe'],
+            'Mercedes-Benz' => ['C-Class', 'E-Class', 'GLC'],
+        ];
     }
 }

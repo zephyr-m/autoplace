@@ -16,6 +16,9 @@ class FilterSubscriptionsTable
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
                 TextColumn::make('user_identifier')
                     ->label('Пользователь')
                     ->searchable(),
@@ -63,6 +66,7 @@ class FilterSubscriptionsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 }

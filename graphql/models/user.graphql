@@ -10,10 +10,7 @@ extend type Query {
     "Find a user by an identifying attribute."
     user(
         "Search by primary key or column."
-        id: ID @eq
-        name: String @eq 
-        email: String @eq
-
+        id: ID! @eq
     ): User @find
 
     "List multiple user."

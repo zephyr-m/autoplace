@@ -10,11 +10,7 @@ extend type Query {
     "Find a vehicle_model by an identifying attribute."
     vehicle_model(
         "Search by primary key or column."
-        id: ID @eq
-        make_id: Int @eq 
-        name: String @eq 
-        status_app: Int @eq
-
+        id: ID! @eq
     ): VehicleModel @find
 
     "List multiple vehicle_model."

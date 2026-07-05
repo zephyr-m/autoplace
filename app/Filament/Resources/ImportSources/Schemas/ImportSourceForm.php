@@ -13,8 +13,10 @@ class ImportSourceForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('Название')
                     ->required(),
                 Toggle::make('is_active')
+                    ->label('Активен')
                     ->required(),
             ]);
     }
