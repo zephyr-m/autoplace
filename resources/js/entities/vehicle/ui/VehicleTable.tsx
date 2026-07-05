@@ -47,7 +47,7 @@ export default function VehicleTable({ vehicles }: VehicleTableProps) {
                             <td className="p-3 text-zinc-500 font-medium">{vehicle.seller}</td>
                             <td className="p-3 font-bold text-zinc-950">${vehicle.price.toLocaleString()}</td>
                             <td className="p-3 text-right">
-                                <Button variant="outline" size="sm" className="h-7 px-2 font-bold text-zinc-700">
+                                <Button href={`/vehicles/${vehicle.id}`} variant="outline" size="sm" className="h-7 px-2 font-bold text-zinc-700">
                                     Открыть
                                 </Button>
                             </td>

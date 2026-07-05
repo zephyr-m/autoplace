@@ -6,6 +6,10 @@ interface UserNotificationsData {
     user_notifications: AccountNotification[];
 }
 
+interface MarkUserNotificationsReadData {
+    markUserNotificationsRead: number;
+}
+
 interface UserNotificationsVariables extends Record<string, unknown> {
     userIdentifier: string;
     limit: number;
@@ -51,4 +55,17 @@ export async function getUserNotifications(
     );
 
     return data.user_notifications;
+}
+
+export async function markUserNotificationsRead(userIdentifier = 'demo-user@example.com'): Promise<number> {
+    const data = await graphqlRequest<MarkUserNotificationsReadData, { userIdentifier: string }>(
+        `
+            mutation MarkUserNotificationsRead($userIdentifier: String!) {
+              markUserNotificationsRead(user_identifier: $userIdentifier)
+            }
+        `,
+        { userIdentifier },
+    );
+
+    return data.markUserNotificationsRead;
 }

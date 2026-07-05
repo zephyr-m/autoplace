@@ -10,13 +10,18 @@ import {
     Trash2,
     User,
 } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import type { ReactNode } from 'react';
 
 import { FILTER_SUBSCRIPTION_STATUS, formatFilterSubscriptionCriteria, formatFilterSubscriptionTitle } from '@/entities/filter-subscription/model/formatters';
 import { useFilterSubscriptions } from '@/entities/filter-subscription/model/useFilterSubscriptions';
+import { getMakes } from '@/entities/make/api/makeRepository';
+import type { Make } from '@/entities/make/model/types';
+import { markUserNotificationsRead } from '@/entities/notification/api/notificationRepository';
 import { useUserNotifications } from '@/entities/notification/model/useUserNotifications';
 import type { AccountNotification } from '@/entities/notification/model/types';
+import { getVehicleModels } from '@/entities/vehicle-model/api/vehicleModelRepository';
+import type { VehicleModel } from '@/entities/vehicle-model/model/types';
 import AppLayout from '@/shared/layout/AppLayout';
 import Button from '@/shared/ui/Button';
 import Card from '@/shared/ui/Card';
@@ -38,6 +43,7 @@ interface NotificationItem {
     text: string;
     time: string;
     unread: boolean;
+    vehicleUrl: string | null;
 }
 
 interface ChatMessage {
@@ -94,12 +100,38 @@ export default function Account() {
     // Subscriptions tab segment filter: all / active / paused
     const [subFilter, setSubFilter] = useState<'all' | 'active' | 'paused'>('all');
     const [updatingSubscriptionIds, setUpdatingSubscriptionIds] = useState<Set<string>>(() => new Set());
+    const [makes, setMakes] = useState<Make[]>([]);
+    const [models, setModels] = useState<VehicleModel[]>([]);
 
     const [readNotificationIds, setReadNotificationIds] = useState<Set<string>>(() => new Set());
+    const lastMarkedNotificationKeyRef = useRef('');
 
     // Notifications category filter: all / subscription / favorite / message
     const [notifFilter, setNotifFilter] = useState<'all' | 'subscription' | 'favorite' | 'message'>('all');
     const [notifSort, setNotifSort] = useState<'newest' | 'unread'>('newest');
+
+    useEffect(() => {
+        let isMounted = true;
+
+        Promise.all([getMakes(), getVehicleModels()])
+            .then(([loadedMakes, loadedModels]) => {
+                if (!isMounted) {
+                    return;
+                }
+
+                setMakes(loadedMakes);
+                setModels(loadedModels);
+            })
+            .catch(() => {
+                if (isMounted) {
+                    showToast('Не удалось загрузить справочники');
+                }
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     // Messages/Dialogues state with active chat simulation
     const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
@@ -173,9 +205,18 @@ export default function Account() {
     };
 
     // Mark all notifications as read
-    const handleMarkAllRead = () => {
-        setReadNotificationIds(new Set(accountNotifications.map(notification => notification.id)));
-        showToast('Все уведомления отмечены как прочитанные');
+    const handleMarkAllRead = async () => {
+        const ids = accountNotifications.map(notification => notification.id);
+
+        setReadNotificationIds(new Set(ids));
+
+        try {
+            await markUserNotificationsRead();
+            await reloadNotifications();
+            showToast('Все уведомления отмечены как прочитанные');
+        } catch (caught) {
+            showToast(caught instanceof Error ? caught.message : 'Не удалось отметить уведомления');
+        }
     };
 
     // Remove Favorite
@@ -219,6 +260,11 @@ export default function Account() {
         return subscriptions;
     }, [subscriptions, subFilter]);
 
+    const subscriptionFormatLookups = useMemo(() => ({
+        makesById: new Map(makes.map(make => [Number(make.id), make.name])),
+        modelsById: new Map(models.map(model => [Number(model.id), model.name])),
+    }), [makes, models]);
+
     // Filter Notifications computed list
     const notifications = useMemo(
         () => accountNotifications.map(notification => toNotificationItem(notification, readNotificationIds)),
@@ -235,6 +281,26 @@ export default function Account() {
         }
         return list;
     }, [notifications, notifFilter, notifSort]);
+
+    useEffect(() => {
+        const unreadIds = accountNotifications
+            .filter(notification => !notification.read_at)
+            .map(notification => notification.id);
+        const unreadKey = unreadIds.join(',');
+
+        if (activeTab !== 'notifications' || unreadIds.length === 0 || unreadKey === lastMarkedNotificationKeyRef.current) {
+            return;
+        }
+
+        lastMarkedNotificationKeyRef.current = unreadKey;
+        setReadNotificationIds(prev => new Set([...prev, ...unreadIds]));
+
+        void markUserNotificationsRead()
+            .then(() => reloadNotifications())
+            .catch(() => {
+                lastMarkedNotificationKeyRef.current = '';
+            });
+    }, [activeTab, accountNotifications, reloadNotifications]);
 
     // Send Message inside Simulated Chat
     const handleSendMessage = () => {
@@ -313,24 +379,7 @@ export default function Account() {
     };
 
     return (
-        <AppLayout
-            navItems={[
-                { label: 'Каталог', href: '/catalog' },
-                { label: 'Подписки', onClick: () => setActiveTab('subscriptions'), active: activeTab === 'subscriptions' },
-                { label: 'Уведомления', onClick: () => setActiveTab('notifications'), active: activeTab === 'notifications' },
-                { label: 'Настройки', onClick: () => setActiveTab('settings'), active: activeTab === 'settings' },
-            ]}
-            actions={(
-                <>
-                    <Button variant="outline" size="sm" className="h-9 px-4">
-                        Выйти
-                    </Button>
-                    <Button href="/catalog" variant="default" size="sm" className="h-9 px-4">
-                        В каталог
-                    </Button>
-                </>
-            )}
-        >
+        <AppLayout>
 
             {/* Global Toast */}
             {toastMsg && (
@@ -464,7 +513,7 @@ export default function Account() {
                                         {subscriptions.slice(0, 2).map(sub => (
                                             <div key={sub.id} className="border border-zinc-200 rounded p-3 flex justify-between items-center bg-zinc-50">
                                                 <div>
-                                                    <strong className="text-[13px] font-bold text-zinc-800">{formatFilterSubscriptionTitle(sub)}</strong>
+                                                    <strong className="text-[13px] font-bold text-zinc-800">{formatFilterSubscriptionTitle(sub, subscriptionFormatLookups)}</strong>
                                                     <p className="text-xs text-zinc-400 truncate max-w-[200px] mt-0.5">{formatFilterSubscriptionCriteria(sub)}</p>
                                                 </div>
                                                 <span className="text-xs font-semibold bg-white border border-zinc-200 px-2 py-0.5 rounded shadow-sm text-zinc-950">
@@ -581,7 +630,7 @@ export default function Account() {
                                                         {sub.status === FILTER_SUBSCRIPTION_STATUS.active ? 'Активна' : 'Пауза'}
                                                     </span>
                                                 </div>
-                                                <h2 className="text-base font-bold text-zinc-900 mt-2">{formatFilterSubscriptionTitle(sub)}</h2>
+                                                <h2 className="text-base font-bold text-zinc-900 mt-2">{formatFilterSubscriptionTitle(sub, subscriptionFormatLookups)}</h2>
                                                 <p className="text-xs text-zinc-500 font-medium mt-0.5">{formatFilterSubscriptionCriteria(sub)}</p>
                                             </div>
                                             <span className="text-sm font-semibold text-zinc-950 bg-white border border-zinc-200 rounded px-2 py-1 shadow-sm shrink-0">
@@ -688,7 +737,7 @@ export default function Account() {
                                                 <p className="text-xs text-zinc-500 leading-normal font-medium">{notif.text}</p>
 
                                                 <div className="flex gap-2 pt-2">
-                                                    <Button href="/catalog" variant="default" size="sm" className="h-8 text-xs font-semibold px-3">
+                                                    <Button href={notif.vehicleUrl ?? '/catalog'} variant="default" size="sm" className="h-8 text-xs font-semibold px-3">
                                                         Посмотреть
                                                     </Button>
                                                 </div>
@@ -1006,6 +1055,7 @@ function toNotificationItem(notification: AccountNotification, readNotificationI
         text,
         time: formatNotificationTime(notification.created_at),
         unread: !notification.read_at && !readNotificationIds.has(notification.id),
+        vehicleUrl: vehicle ? `/vehicles/${vehicle.id}` : null,
     };
 }
 

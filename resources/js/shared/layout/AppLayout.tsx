@@ -1,8 +1,10 @@
 import { Link } from '@inertiajs/react';
+import { RefreshCw } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import AppHeader from './AppHeader';
 import type { HeaderNavItem } from './AppHeader';
+import Button from '@/shared/ui/Button';
 
 interface AppLayoutProps {
     navItems?: HeaderNavItem[];
@@ -10,10 +12,31 @@ interface AppLayoutProps {
     children: ReactNode;
 }
 
+const defaultNavItems: HeaderNavItem[] = [
+    { label: 'Каталог', href: '/catalog' },
+    { label: 'Тарифы', href: '#' },
+    { label: 'Для дилеров', href: '#' },
+    { label: 'Кабинет', href: '/account' },
+    { label: 'Мои подписки', href: '/account' },
+    { label: 'Помощь', href: '#' },
+];
+
+const defaultActions = (
+    <>
+        <Button href="/account" variant="outline" size="sm" className="h-9 px-4">
+            Войти
+        </Button>
+        <Button href="/catalog" variant="default" size="sm" className="h-9 px-4">
+            <RefreshCw size={15} />
+            Обновить
+        </Button>
+    </>
+);
+
 export default function AppLayout({ navItems, actions, children }: AppLayoutProps) {
     return (
         <main className="min-h-screen bg-zinc-50 font-sans leading-normal text-zinc-950">
-            <AppHeader navItems={navItems} actions={actions} />
+            <AppHeader navItems={navItems ?? defaultNavItems} actions={actions ?? defaultActions} />
 
             {children}
 

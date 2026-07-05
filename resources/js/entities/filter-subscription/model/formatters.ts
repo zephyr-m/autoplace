@@ -1,15 +1,23 @@
 import type { FilterSubscription } from './types';
 
+interface FilterSubscriptionFormatLookups {
+    makesById?: Map<number, string>;
+    modelsById?: Map<number, string>;
+}
+
 export const FILTER_SUBSCRIPTION_STATUS = {
     active: 1,
     paused: 2,
 } as const;
 
-export function formatFilterSubscriptionTitle(subscription: FilterSubscription): string {
+export function formatFilterSubscriptionTitle(
+    subscription: FilterSubscription,
+    lookups: FilterSubscriptionFormatLookups = {},
+): string {
     const filter = subscription.filter;
     const parts = [
-        formatArrayPart(filter.make_ids, 'марки'),
-        formatArrayPart(filter.model_ids, 'модели'),
+        formatArrayPart(filter.make_ids, 'марки', lookups.makesById),
+        formatArrayPart(filter.model_ids, 'модели', lookups.modelsById),
         formatArrayPart(filter.fuel_types, 'топливо'),
     ].filter(Boolean);
 
@@ -27,12 +35,18 @@ export function formatFilterSubscriptionCriteria(subscription: FilterSubscriptio
     return parts.length > 0 ? parts.join(' · ') : 'Без дополнительных ограничений';
 }
 
-function formatArrayPart(value: unknown, label: string): string | null {
+function formatArrayPart(value: unknown, label: string, labelsById?: Map<number, string>): string | null {
     if (!Array.isArray(value) || value.length === 0) {
         return null;
     }
 
-    return `${label}: ${value.join(', ')}`;
+    const formatted = value.map(item => {
+        const numeric = Number(item);
+
+        return Number.isFinite(numeric) ? labelsById?.get(numeric) ?? String(item) : String(item);
+    });
+
+    return `${label}: ${formatted.join(', ')}`;
 }
 
 function formatRange(label: string, min: unknown, max: unknown, suffix = ''): string | null {

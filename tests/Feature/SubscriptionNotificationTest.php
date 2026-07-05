@@ -339,6 +339,57 @@ class SubscriptionNotificationTest extends TestCase
             ->assertJsonPath('data.user_notifications.0.vehicle.make.name', 'Toyota');
     }
 
+    public function test_mark_user_notifications_read_updates_only_user_notifications(): void
+    {
+        [$source, $make, $model] = $this->catalogReferences('Demo Import', 'Toyota', 'Camry');
+        $ownSubscription = FilterSubscription::query()->create([
+            'user_identifier' => 'demo-user@example.com',
+            'filter' => ['make_id' => $make->id],
+            'status' => FilterSubscription::STATUS_ACTIVE,
+        ]);
+        $otherSubscription = FilterSubscription::query()->create([
+            'user_identifier' => 'other-user@example.com',
+            'filter' => ['make_id' => $make->id],
+            'status' => FilterSubscription::STATUS_ACTIVE,
+        ]);
+        $vehicle = CatalogVehicle::query()->create([
+            'source_id' => $source->id,
+            'source_reference' => 'mark-read-camry',
+            'make_id' => $make->id,
+            'model_id' => $model->id,
+            'price' => 26000,
+            'mileage' => 42000,
+            'power' => 203,
+            'fuel_type' => 'gasoline',
+            'year' => 2021,
+        ]);
+        $ownNotification = Notification::query()->create([
+            'subscription_id' => $ownSubscription->id,
+            'vehicle_id' => $vehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
+        $otherNotification = Notification::query()->create([
+            'subscription_id' => $otherSubscription->id,
+            'vehicle_id' => $vehicle->id,
+            'type' => Notification::TYPE_VEHICLE_MATCH,
+        ]);
+
+        $this->postJson('/graphql', [
+            'query' => <<<'GRAPHQL'
+                mutation ($userIdentifier: String!) {
+                  markUserNotificationsRead(user_identifier: $userIdentifier)
+                }
+                GRAPHQL,
+            'variables' => ['userIdentifier' => 'demo-user@example.com'],
+        ])
+            ->assertOk()
+            ->assertJsonMissingPath('errors')
+            ->assertJsonPath('data.markUserNotificationsRead', 1);
+
+        $this->assertNotNull($ownNotification->refresh()->read_at);
+        $this->assertNull($otherNotification->refresh()->read_at);
+    }
+
     public function test_create_filter_subscription_rejects_empty_filter(): void
     {
         $this->postJson('/graphql', [

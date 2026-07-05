@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { Bell, SlidersHorizontal, Trash2, AlertCircle, List as ListIcon, Grid, Table as TableIcon, RefreshCw } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { createFilterSubscription } from '@/entities/filter-subscription/api/filterSubscriptionRepository';
 import { buildSubscriptionFilter } from '@/features/catalog-filter/model/buildSubscriptionFilter';
@@ -54,6 +54,33 @@ export default function Catalog() {
         () => filterAndSortVehicles(vehicles, filters, sortOrder),
         [vehicles, filters, sortOrder],
     );
+    const totalPages = Math.max(1, Math.ceil(processedVehicles.length / perPage));
+    const pageStart = (currentPage - 1) * perPage;
+    const paginatedVehicles = processedVehicles.slice(pageStart, pageStart + perPage);
+    const paginationPages = Array.from({ length: totalPages }, (_, index) => index + 1);
+    const filterPaginationKey = [
+        filters.selectedMakes.join(','),
+        filters.selectedModels.join(','),
+        filters.minPrice,
+        filters.maxPrice,
+        filters.minYear,
+        filters.maxYear,
+        filters.minMileage,
+        filters.maxMileage,
+        filters.fuels.join(','),
+        sortOrder,
+        perPage,
+    ].join('|');
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filterPaginationKey]);
+
+    useEffect(() => {
+        if (currentPage > totalPages) {
+            setCurrentPage(totalPages);
+        }
+    }, [currentPage, totalPages]);
 
     // Add Subscription
     const handleSubscribe = async () => {
@@ -224,7 +251,7 @@ export default function Catalog() {
                     {/* Cards Views */}
                     {viewMode !== 'table' && (
                         <div className={viewMode === 'gallery' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4' : 'space-y-4'}>
-                            {!isLoading && processedVehicles.map(vehicle => (
+                            {!isLoading && paginatedVehicles.map(vehicle => (
                                 <VehicleCard key={vehicle.id} vehicle={vehicle} viewMode={viewMode} />
                             ))}
                             {isLoading && (
@@ -242,7 +269,7 @@ export default function Catalog() {
 
                     {/* Table View */}
                     {viewMode === 'table' && !isLoading && (
-                        <VehicleTable vehicles={processedVehicles} />
+                        <VehicleTable vehicles={paginatedVehicles} />
                     )}
 
                     {/* Bottom Pagination */}
@@ -250,7 +277,7 @@ export default function Catalog() {
                         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 pt-4 border-t border-zinc-200">
                             <label className="flex items-center gap-2 text-xs font-bold text-zinc-500 uppercase tracking-wider">
                                 Показывать
-                                <select value={perPage} onChange={(e) => setPerPage(Number(e.target.value))} className="border border-zinc-200 rounded p-1 bg-white font-semibold text-zinc-805">
+                                <select value={perPage} onChange={(e) => setPerPage(Number(e.target.value))} className="border border-zinc-200 rounded p-1 bg-white font-semibold text-zinc-800">
                                     {CATALOG_PAGE_SIZE_OPTIONS.map(option => (
                                         <option key={option} value={option}>{option}</option>
                                     ))}
@@ -259,7 +286,7 @@ export default function Catalog() {
                             </label>
 
                             <nav className="flex items-center gap-1 select-none">
-                                {[1, 2, 3].map(page => (
+                                {paginationPages.map(page => (
                                     <button
                                         key={page}
                                         onClick={() => setCurrentPage(page)}

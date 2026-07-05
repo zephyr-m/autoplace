@@ -37,7 +37,7 @@ export default function VehicleCard({ vehicle, viewMode }: VehicleCardProps) {
                 <div className="p-4 pt-0">
                     <div className="flex items-center justify-between border-t border-zinc-100 pt-3 text-xs text-zinc-500 mt-2">
                         <span className="font-semibold text-zinc-800">{vehicle.seller}</span>
-                        <Button variant="outline" size="sm" className="h-7 font-bold text-zinc-700">
+                        <Button href={`/vehicles/${vehicle.id}`} variant="outline" size="sm" className="h-7 font-bold text-zinc-700">
                             Подробнее
                         </Button>
                     </div>
@@ -86,7 +86,7 @@ export default function VehicleCard({ vehicle, viewMode }: VehicleCardProps) {
                         <Button variant="outline" size="sm" className="font-bold text-zinc-700">
                             Сравнить
                         </Button>
-                        <Button variant="default" size="sm" className="font-bold">
+                        <Button href={`/vehicles/${vehicle.id}`} variant="default" size="sm" className="font-bold">
                             Подробнее
                         </Button>
                     </div>

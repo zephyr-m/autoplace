@@ -40,4 +40,5 @@ extend type Mutation {
     createNotification(subscription_id: Int!, vehicle_id: Int!, type: String!, channel: String, status: Int!, payload: JSON, sent_at: DateTime, read_at: DateTime): Notification @create
     updateNotification(id: ID, subscription_id: Int!, vehicle_id: Int!, type: String!, channel: String, status: Int!, payload: JSON, sent_at: DateTime, read_at: DateTime): Notification @update
     deleteNotification(id: ID): Notification @delete
+    markUserNotificationsRead(user_identifier: String!): Int! @field(resolver: "App\\GraphQL\\Mutations\\MarkUserNotificationsRead")
 }
