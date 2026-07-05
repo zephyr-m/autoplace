@@ -14,7 +14,3 @@ http://homepage.127.0.0.1.sslip.io {
 http://dozzle.127.0.0.1.sslip.io {
     reverse_proxy dozzle:8080
 }
-
-http://kuma.127.0.0.1.sslip.io {
-    reverse_proxy uptime-kuma:3001
-}

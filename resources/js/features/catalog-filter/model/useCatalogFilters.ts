@@ -5,13 +5,13 @@ import type { CatalogFiltersModel, CatalogFiltersState } from './types';
 const DEFAULT_FILTERS: CatalogFiltersState = {
     selectedMakes: [],
     selectedModels: [],
-    minPrice: 20000,
-    maxPrice: 50000,
-    minYear: 2018,
-    maxYear: 2024,
+    minPrice: 0,
+    maxPrice: 150000,
+    minYear: 1990,
+    maxYear: 2026,
     minMileage: 0,
-    maxMileage: 80000,
-    fuels: ['gasoline'],
+    maxMileage: 250000,
+    fuels: [],
 };
 
 const RESET_FILTERS: CatalogFiltersState = {

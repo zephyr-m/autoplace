@@ -67,6 +67,36 @@ class SubscriptionNotificationTest extends TestCase
         ]);
     }
 
+    public function test_multiple_matching_vehicles_create_multiple_notifications(): void
+    {
+        [$source, $make, $model] = $this->catalogReferences('Demo Import', 'Toyota', 'Camry');
+        $subscription = FilterSubscription::query()->create([
+            'user_identifier' => 'demo-user@example.com',
+            'filter' => [
+                'make_id' => $make->id,
+                'model_id' => $model->id,
+            ],
+            'status' => FilterSubscription::STATUS_ACTIVE,
+        ]);
+
+        $vehicles = collect([
+            ['source_reference' => 'bulk-camry-1', 'price' => 26000, 'mileage' => 42000, 'power' => 203, 'fuel_type' => 'gasoline', 'year' => 2021],
+            ['source_reference' => 'bulk-camry-2', 'price' => 33500, 'mileage' => 68000, 'power' => 219, 'fuel_type' => 'hybrid', 'year' => 2020],
+            ['source_reference' => 'bulk-camry-3', 'price' => 18000, 'mileage' => 140000, 'power' => 181, 'fuel_type' => 'gasoline', 'year' => 2016],
+            ['source_reference' => 'bulk-camry-4', 'price' => 52000, 'mileage' => 12000, 'power' => 225, 'fuel_type' => 'hybrid', 'year' => 2025],
+        ])->map(fn (array $attributes) => CatalogVehicle::query()->create($attributes + [
+            'source_id' => $source->id,
+            'make_id' => $make->id,
+            'model_id' => $model->id,
+        ]));
+
+        $vehicles->each(fn (CatalogVehicle $vehicle) => ProcessVehicleSubscriptions::dispatchSync($vehicle->id));
+
+        $this->assertSame(4, Notification::query()
+            ->where('subscription_id', $subscription->id)
+            ->count());
+    }
+
     public function test_notification_uniqueness_is_enforced_by_database(): void
     {
         [$source, $make, $model] = $this->catalogReferences('Demo Import', 'Toyota', 'Camry');
