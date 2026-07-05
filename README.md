@@ -30,7 +30,7 @@ php artisan test
 
 ## Гайд
 
-[Стартовая страница](http://autoplace.127.0.0.1.sslip.io:8080)
+[Стартовая страница](http://homepage.127.0.0.1.sslip.io:8080/)
 
 #### Админка:
 - Логин: `admin@example.com`
